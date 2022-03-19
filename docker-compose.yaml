@@ -1,0 +1,32 @@
+version: '3.7'
+# To rebuild images...
+# > docker-compose down -v
+# > docker-compose up --build
+
+services:
+  chat-db:
+    image: 'postgres:13'
+    environment:
+      - POSTGRES_USER=master
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=chat
+    ports:
+      - '5432:5432'
+
+  chat-web:
+    build: .
+    container_name: chat-web
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=${DATABASE_URL}
+    env_file:
+      - .env.dev
+    command: 'yarn start'
+    volumes:
+      - ./.:/opt/app
+      - /opt/app/node_modules
+    image: 'chat-web'
+    ports:
+      - 5000:5000
+    depends_on:
+      - chat-db

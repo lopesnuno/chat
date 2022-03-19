@@ -1,0 +1,42 @@
+import { Inject, Service } from 'typedi';
+
+import Random from '../../utils/random';
+
+import RoomMembersRepository from './RoomMembersRepository';
+import Room from './RoomMembersModel';
+
+
+@Service()
+export default class RoomMembersService {
+  constructor(
+    @Inject()
+    private repository: RoomMembersRepository
+  ) {
+  }
+
+  public async create(name: string, id?: string): Promise<Room> {
+    console.log(`Creating room ${id}`);
+    return this.repository.create(new Room(id ?? Random.id(), name, Date.now(), Date.now()));
+  }
+
+  public async get(id: string): Promise<Room> {
+    console.log(`Getting room ${id}`);
+    return this.repository.get(id);
+  }
+
+  public async update(
+    id: string,
+    name: string
+  ): Promise<Room> {
+    console.log(`Updating room ${id}`);
+    // TODO
+    return new Room(id, name, 0, 0);
+  }
+
+  public async delete(id: string): Promise<void> {
+    console.log(`delete room ${id}`);
+    // TODO
+  }
+
+  // TODO: public async addMemberToRoom(memberId: string, roomId: string) {}
+}
