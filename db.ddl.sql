@@ -21,7 +21,7 @@ CREATE TABLE rooms
 CREATE TABLE room_members
 (
     id        char(20) NOT NULL,
-    joined_at numeric NOT NULL,
+    joined_at TIMESTAMP NOT NULL,
     room_id   char(20) NOT NULL
         CONSTRAINT fk_room_members_rooms REFERENCES rooms (id),
     user_id   char(20) NOT NULL
@@ -32,7 +32,7 @@ CREATE TABLE room_members
 CREATE TABLE messages
 (
     id           char(20) NOT NULL,
-    send_at      numeric  NOT NULL,
+    send_at      TIMESTAMP NOT NULL,
     message      varchar(500),
     sender_id    char(20) NOT NULL
         CONSTRAINT fk_messages_sender REFERENCES users (id),
