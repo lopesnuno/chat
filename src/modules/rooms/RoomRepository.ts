@@ -22,7 +22,7 @@ export default class RoomRepository implements Repository<Room> {
     const { rows, rowCount } = await this.db.connect((connection) =>
       connection.query(sql`
           SELECT *
-          FROM room
+          FROM rooms
           WHERE id = ${id};
       `)
     );
@@ -32,6 +32,6 @@ export default class RoomRepository implements Repository<Room> {
     }
     const room = rows[0];
 
-    return new Room(room.id, room.name, room.created_at, room._updatedAt);
+    return new Room(room.id, room.name, new Date(room.created_at as number), new Date(room.updated_at as number));
   }
 }

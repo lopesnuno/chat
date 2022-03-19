@@ -47,7 +47,7 @@ async function updateRoomMembers(req: Request, res: Response, next: NextFunction
 }
 
 export default (app: Router): void => {
-  app.get('/room_members/:id', getRoomMembers());
-  app.post('/room_members', createRoomMembers());
-  app.put('/room_members', updateRoomMembers());
+  app.get('/room-members/:id', getRoomMembers);
+  app.post('/room-members', createRoomMembers);
+  app.put('/room-members', updateRoomMembers);
 };

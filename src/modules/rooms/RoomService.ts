@@ -16,7 +16,7 @@ export default class RoomService {
 
   public async create(name: string, id?: string): Promise<Room> {
     console.log(`Creating room ${id}`);
-    return this.repository.create(new Room(id ?? Random.id(), name, Date.now(), Date.now()));
+    return this.repository.create(new Room(id ?? Random.id(), name, new Date(), new Date()));
   }
 
   public async get(id: string): Promise<Room> {
@@ -30,7 +30,7 @@ export default class RoomService {
   ): Promise<Room> {
     console.log(`Updating room ${id}`);
     // TODO
-    return new Room(id, name, 0, 0);
+    return new Room(id, name, new Date(), new Date());
   }
 
   public async delete(id: string): Promise<void> {
