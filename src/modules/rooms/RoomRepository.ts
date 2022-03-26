@@ -15,6 +15,7 @@ export default class RoomRepository implements Repository<Room> {
   }
 
   async create(o: Room): Promise<Room> {
+
     return Promise.resolve(o);
   }
 
@@ -35,3 +36,5 @@ export default class RoomRepository implements Repository<Room> {
     return new Room(room.id, room.name, new Date(room.created_at as number), new Date(room.updated_at as number));
   }
 }
+
+

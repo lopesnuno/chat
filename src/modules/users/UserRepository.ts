@@ -4,25 +4,26 @@ import { DatabasePool, sql } from 'slonik';
 
 import { Repository } from '../../types';
 
-import RoomMembers from './RoomMembersModel';
+import User from './UserModel';
 
 @Service()
-export default class RoomMembersRepository implements Repository<RoomMembers> {
+export default class UserRepository implements Repository<User> {
   constructor(
     @Inject('db')
     private db: DatabasePool
   ) {
   }
 
-  async create(o: RoomMembers): Promise<RoomMembers> {
+  async create(o: User): Promise<User> {
+
     return Promise.resolve(o);
   }
 
-  async get(id: string): Promise<RoomMembers | null> {
+  async get(id: string): Promise<User | null> {
     const { rows, rowCount } = await this.db.connect((connection) =>
       connection.query(sql`
           SELECT *
-          FROM room
+          FROM users
           WHERE id = ${id};
       `)
     );
@@ -30,8 +31,10 @@ export default class RoomMembersRepository implements Repository<RoomMembers> {
     if (rowCount === 0) {
       return null;
     }
-    const room = rows[0];
+    const user = rows[0];
 
-    return new RoomMembers(room.id, room.name, room.created_at, room._updatedAt);
+    return new User(user.id, user.name, new Date(user.created_at as number), new Date(user.updated_at as number));
   }
 }
+
+
