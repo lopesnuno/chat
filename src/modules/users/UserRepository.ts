@@ -14,11 +14,6 @@ export default class UserRepository implements Repository<User> {
   ) {
   }
 
-  async create(o: User): Promise<User> {
-
-    return Promise.resolve(o);
-  }
-
   async get(id: string): Promise<User | null> {
     const { rows, rowCount } = await this.db.connect((connection) =>
       connection.query(sql`
