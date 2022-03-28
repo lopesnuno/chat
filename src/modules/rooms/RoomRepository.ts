@@ -14,6 +14,27 @@ export default class RoomRepository implements Repository<Room> {
   ) {
   }
 
+  async create(o: Room): Promise<Room> {
+    return Promise.resolve(o);
+  }
+
+  async get(id: string): Promise<Room | null> {
+    const { rows, rowCount } = await this.db.connect((connection) =>
+      connection.query(sql`
+          SELECT *
+          FROM rooms
+          WHERE id = ${id};
+      `)
+    );
+
+    if (rowCount === 0) {
+      return null;
+    }
+    const room = rows[0];
+
+    return new Room(room.id, room.name, new Date(room.created_at as number), new Date(room.updated_at as number));
+  }
+
   async update(id: string, name: string): Promise<Room> {
     await this.db.connect((connection) =>
         connection.query(sql`

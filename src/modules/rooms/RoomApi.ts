@@ -3,6 +3,19 @@ import { Container } from 'typedi';
 
 import RoomService from './RoomService';
 
+async function getRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
+  console.debug('Calling get room: %o', req.params.id);
+  try {
+    const service = Container.get<RoomService>(RoomService);
+    const id = req.params.id;
+    const room = await service.get(id);
+
+    return res.status(200).json(room.json());
+  } catch (e) {
+    console.error('🔥 error: %o', e);
+    return next(e);
+  }
+}
 
 async function updateRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
   console.debug('Calling update room: %o', req.body);
@@ -20,5 +33,6 @@ async function updateRoom(req: Request, res: Response, next: NextFunction): Prom
 }
 
 export default (app: Router): void => {
+  app.get('/room/:id', getRoom);
   app.put('/room/:id', updateRoom);
 };
