@@ -33,7 +33,7 @@ export default class UserRepository implements Repository<User> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
-  async create(name: string, id: string): Promise<boolean> {
+  async create(name: string, id: string): Promise<boolean> {  //problems with typdes.d.ts
     const { rowCount } = await this.db.connect((connection) =>
         connection.query(sql`
             INSERT INTO user(id, name, created_at, updated_at)
