@@ -15,6 +15,7 @@ export default class RoomRepository implements Repository<Room> {
   }
 
   async create(o: Room): Promise<Room> {
+
     return Promise.resolve(o);
   }
 
@@ -48,3 +49,5 @@ export default class RoomRepository implements Repository<Room> {
     return rowCount === 1;
   }
 }
+
+
