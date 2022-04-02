@@ -16,4 +16,9 @@ export default class UserService {
     console.log(`Getting user ${id}`);
     return this.repository.get(id);
   }
+
+  public async update(id: string, name: string): Promise<boolean> {
+    console.log(`Updating user ${id}`);
+    return this.repository.update(id, name);
+  }
 }

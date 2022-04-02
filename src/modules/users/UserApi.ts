@@ -17,6 +17,22 @@ async function getUser(req: Request, res: Response, next: NextFunction): Promise
   }
 }
 
+async function updateUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
+  console.debug('Calling update user: %o', req.body);
+  try {
+    const service = Container.get<UserService>(UserService);
+    const { id, name } = req.body;
+
+    const updated = await service.update(id, name);
+
+    return res.status(200).json({ updated });
+  } catch (e) {
+    console.error('🔥 error: %o', e);
+    return next(e);
+  }
+}
+
 export default (app: Router): void => {
   app.get('/user/:id', getUser);
+  app.put('/user/', updateUser);
 };
