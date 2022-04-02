@@ -30,6 +30,9 @@ export default class UserRepository implements Repository<User> {
 
     return new User(user.id, user.name, new Date(user.created_at as number), new Date(user.updated_at as number));
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
+  create(o: User): Promise<User> {
+    return Promise.resolve(undefined);
+  }
 }
-
-
