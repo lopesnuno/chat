@@ -17,29 +17,15 @@ async function getRoom(req: Request, res: Response, next: NextFunction): Promise
   }
 }
 
-async function createRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
-  console.debug('Calling create room: %o', req.body);
-  try {
-    const service = Container.get<RoomService>(RoomService);
-    const { name } = req.body;
-    const room = await service.create(name);
-
-    return res.status(200).json(room.json());
-  } catch (e) {
-    console.error('🔥 error: %o', e);
-    return next(e);
-  }
-}
-
 async function updateRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
   console.debug('Calling update room: %o', req.body);
   try {
     const service = Container.get<RoomService>(RoomService);
-    const { name } = req.body;
-    // TODO: change to service.update, once implemented
-    const room = await service.create(name);
+    const { id, name } = req.body;
 
-    return res.status(200).json(room.json());
+    const updated = await service.update(id, name);
+
+    return res.status(200).json({ updated });
   } catch (e) {
     console.error('🔥 error: %o', e);
     return next(e);
@@ -48,6 +34,5 @@ async function updateRoom(req: Request, res: Response, next: NextFunction): Prom
 
 export default (app: Router): void => {
   app.get('/room/:id', getRoom);
-  app.post('/room', createRoom);
-  app.put('/room', updateRoom);
+  app.put('/room/', updateRoom);
 };
