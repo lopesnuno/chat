@@ -1,13 +1,13 @@
 import { Router } from 'express';
 
 import roomsApi from '../modules/rooms/RoomApi';
-import accountApi from '../modules/account/AccountApi';
+import usersApi from '../modules/users/UserApi';
 
 
 export default (): Router => {
   const app = Router();
 
-  accountApi(app);
+  usersApi(app);
   roomsApi(app);
   return app;
 };
