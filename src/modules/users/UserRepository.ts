@@ -37,7 +37,7 @@ export default class UserRepository implements Repository<User> {
     const { rowCount } = await this.db.connect((connection) =>
         connection.query(sql`
             INSERT INTO user(id, name, created_at, updated_at)
-            VALUES(id, name, current_timestamp , current_timestamp);
+            VALUES(${id}, ${name}, current_timestamp , current_timestamp);
       `)
     );
 
