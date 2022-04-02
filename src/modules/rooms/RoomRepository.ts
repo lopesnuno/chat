@@ -41,7 +41,7 @@ export default class RoomRepository implements Repository<Room> {
         connection.query(sql`
           UPDATE rooms
           SET name = ${name},
-              updated_at = current_date
+              updated_at = current_timestamp
           WHERE id = ${id};
         `)
     );
