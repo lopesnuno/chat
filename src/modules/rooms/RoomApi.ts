@@ -23,9 +23,9 @@ async function updateRoom(req: Request, res: Response, next: NextFunction): Prom
     const service = Container.get<RoomService>(RoomService);
     const { id, name } = req.body;
 
-    const room = await service.update(id, name);
+    const updated = await service.update(id, name);
 
-    return res.status(200).json(room.json());
+    return res.status(200).json({ updated });
   } catch (e) {
     console.error('🔥 error: %o', e);
     return next(e);
@@ -34,5 +34,5 @@ async function updateRoom(req: Request, res: Response, next: NextFunction): Prom
 
 export default (app: Router): void => {
   app.get('/room/:id', getRoom);
-  app.put('/room/:id', updateRoom);
+  app.put('/room/', updateRoom);
 };

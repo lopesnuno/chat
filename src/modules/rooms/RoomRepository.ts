@@ -35,15 +35,16 @@ export default class RoomRepository implements Repository<Room> {
     return new Room(room.id, room.name, new Date(room.created_at as number), new Date(room.updated_at as number));
   }
 
-  async update(id: string, name: string): Promise<Room> {
-    await this.db.connect((connection) =>
+  async update(id: string, name: string): Promise<boolean> {
+    const { rowCount } = await this.db.connect((connection) =>
         connection.query(sql`
           UPDATE rooms
-          SET name = ${name}
+          SET name = ${name},
+              updated_at = current_date
           WHERE id = ${id};
         `)
     );
 
-    return new Room(id, name, new Date(), new Date());
+    return rowCount === 1;
   }
 }

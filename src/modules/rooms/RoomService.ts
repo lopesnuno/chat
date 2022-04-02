@@ -17,7 +17,7 @@ export default class RoomService {
     return this.repository.get(id);
   }
 
-  public async update(id: string, name: string): Promise<Room> {
+  public async update(id: string, name: string): Promise<boolean> {
     console.log(`Updating room ${id}`);
     return this.repository.update(id, name);
   }
