@@ -6,6 +6,7 @@ import { Repository } from '../../types';
 
 import User from './UserModel';
 
+
 @Service()
 export default class UserRepository implements Repository<User> {
   constructor(
@@ -32,7 +33,14 @@ export default class UserRepository implements Repository<User> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
-  create(o: User): Promise<User> {
-    return Promise.resolve(undefined);
+  async create(name: string, id: string): Promise<boolean> {
+    const { rowCount } = await this.db.connect((connection) =>
+        connection.query(sql`
+            INSERT INTO user(id, name, created_at, updated_at)
+            VALUES(id, name, current_timestamp , current_timestamp);
+      `)
+    );
+
+    return rowCount === 1;
   }
 }

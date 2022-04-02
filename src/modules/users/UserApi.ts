@@ -17,6 +17,22 @@ async function getUser(req: Request, res: Response, next: NextFunction): Promise
   }
 }
 
+async function createUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
+  console.debug('Calling create user: %o', req.body);
+  try {
+    const service = Container.get<UserService>(UserService);
+    const { name, id } = req.body;
+
+    const created = await service.create(name, id);
+
+    return res.status(200).json({ created });
+  } catch (e) {
+    console.error('🔥 error: %o', e);
+    return next(e);
+  }
+}
+
 export default (app: Router): void => {
   app.get('/user/:id', getUser);
+  app.post('/user', createUser);
 };
