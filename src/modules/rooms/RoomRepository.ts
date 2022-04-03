@@ -14,10 +14,6 @@ export default class RoomRepository implements Repository<Room> {
   ) {
   }
 
-  async create(o: Room): Promise<Room> {
-
-    return Promise.resolve(o);
-  }
 
   async get(id: string): Promise<Room | null> {
     const { rows, rowCount } = await this.db.connect((connection) =>
@@ -34,6 +30,17 @@ export default class RoomRepository implements Repository<Room> {
     const room = rows[0];
 
     return new Room(room.id, room.name, new Date(room.created_at as number), new Date(room.updated_at as number));
+  }
+
+  async create(name: string, id: string, owner: string): Promise<boolean> {  //problems with typdes.d.ts
+    const { rowCount } = await this.db.connect((connection) =>
+        connection.query(sql`
+            INSERT INTO rooms(id, name, created_at, updated_at, owner)
+            VALUES(${id}, ${name}, current_timestamp , current_timestamp, ${owner});
+      `)
+    );
+
+    return rowCount === 1;
   }
 
   async update(id: string, name: string): Promise<boolean> {

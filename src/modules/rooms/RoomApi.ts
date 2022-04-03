@@ -17,6 +17,21 @@ async function getRoom(req: Request, res: Response, next: NextFunction): Promise
   }
 }
 
+async function createRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
+  console.debug('Calling create user: %o', req.body);
+  try {
+    const service = Container.get<RoomService>(RoomService);
+    const { name, id, owner } = req.body;
+
+    const created = await service.create(name, id, owner);
+
+    return res.status(200).json({ created });
+  } catch (e) {
+    console.error('🔥 error: %o', e);
+    return next(e);
+  }
+}
+
 async function updateRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
   console.debug('Calling update room: %o', req.body);
   try {
@@ -35,4 +50,5 @@ async function updateRoom(req: Request, res: Response, next: NextFunction): Prom
 export default (app: Router): void => {
   app.get('/room/:id', getRoom);
   app.put('/room/', updateRoom);
+  app.post('/room/', createRoom);
 };
