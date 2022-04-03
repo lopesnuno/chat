@@ -22,4 +22,9 @@ export default class RoomService {
     return this.repository.update(id, name);
   }
 
+  public async delete(id: string): Promise<boolean> {
+    console.log(`Deleting room ${id}`);
+    return this.repository.delete(id);
+  }
+
 }

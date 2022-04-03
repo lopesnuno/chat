@@ -32,7 +32,23 @@ async function updateRoom(req: Request, res: Response, next: NextFunction): Prom
   }
 }
 
+async function deleteRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
+  console.debug('Calling delete room: %o', req.body);
+  try {
+    const service = Container.get<RoomService>(RoomService);
+    const { id } = req.body;
+
+    const deleted = await service.delete(id);
+
+    return res.status(200).json({ deleted });
+  } catch (e) {
+    console.error('🔥 error: %o', e);
+    return next(e);
+  }
+}
+
 export default (app: Router): void => {
   app.get('/room/:id', getRoom);
   app.put('/room/', updateRoom);
+  app.deelte('/room/', deleteRoom);
 };
