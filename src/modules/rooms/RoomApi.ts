@@ -18,7 +18,7 @@ async function getRoom(req: Request, res: Response, next: NextFunction): Promise
 }
 
 async function createRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
-  console.debug('Calling create user: %o', req.body);
+  console.debug('Calling create room: %o', req.body);
   try {
     const service = Container.get<RoomService>(RoomService);
     const { name, id, owner } = req.body;
