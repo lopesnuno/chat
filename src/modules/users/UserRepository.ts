@@ -36,7 +36,7 @@ export default class UserRepository implements Repository<User> {
   async create(name: string, id: string): Promise<boolean> {  //problems with typdes.d.ts
     const { rowCount } = await this.db.connect((connection) =>
         connection.query(sql`
-            INSERT INTO user(id, name, created_at, updated_at)
+            INSERT INTO users(id, name, created_at, updated_at)
             VALUES(${id}, ${name}, current_timestamp , current_timestamp);
       `)
     );
