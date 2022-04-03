@@ -50,5 +50,5 @@ async function deleteRoom(req: Request, res: Response, next: NextFunction): Prom
 export default (app: Router): void => {
   app.get('/room/:id', getRoom);
   app.put('/room/', updateRoom);
-  app.deelte('/room/', deleteRoom);
+  app.delete('/room/', deleteRoom);
 };
