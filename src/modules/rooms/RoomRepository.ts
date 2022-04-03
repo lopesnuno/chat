@@ -35,6 +35,19 @@ export default class RoomRepository implements Repository<Room> {
 
     return new Room(room.id, room.name, new Date(room.created_at as number), new Date(room.updated_at as number));
   }
+
+  async update(id: string, name: string): Promise<boolean> {
+    const { rowCount } = await this.db.connect((connection) =>
+        connection.query(sql`
+          UPDATE rooms
+          SET name = ${name},
+              updated_at = current_timestamp
+          WHERE id = ${id};
+        `)
+    );
+
+    return rowCount === 1;
+  }
 }
 
 

@@ -32,6 +32,19 @@ export default class UserRepository implements Repository<User> {
     return new User(user.id, user.name, new Date(user.created_at as number), new Date(user.updated_at as number));
   }
 
+  async update(id: string, name: string): Promise<boolean> {
+    const { rowCount } = await this.db.connect((connection) =>
+        connection.query(sql`
+          UPDATE users
+          SET name = ${name},
+              updated_at = current_timestamp
+          WHERE id = ${id};
+        `)
+    );
+
+    return rowCount === 1;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
   async create(name: string, id: string): Promise<boolean> {  //problems with typdes.d.ts
     const { rowCount } = await this.db.connect((connection) =>
