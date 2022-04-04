@@ -44,6 +44,18 @@ export default class UserRepository implements Repository<User> {
     return rowCount === 1;
   }
 
+  async delete(id: string): Promise<boolean> {
+    const { rowCount } = await this.db.connect((connection) =>
+        connection.query(sql`
+          DELETE
+          FROM users
+          WHERE id = ${id};
+        `)
+    );
+
+    return rowCount === 1;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
   create(o: User): Promise<User> {
     return Promise.resolve(undefined);

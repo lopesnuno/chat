@@ -21,4 +21,9 @@ export default class UserService {
     console.log(`Updating user ${id}`);
     return this.repository.update(id, name);
   }
+
+  public async delete(id: string): Promise<boolean> {
+    console.log(`Deleting user ${id}`);
+    return this.repository.delete(id);
+  }
 }
