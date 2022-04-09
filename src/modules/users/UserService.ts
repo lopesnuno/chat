@@ -4,8 +4,6 @@ import UserRepository from './UserRepository';
 import User from './UserModel';
 
 
-import Random from '../../utils/random';
-
 @Service()
 export default class UserService {
   constructor(
@@ -18,9 +16,10 @@ export default class UserService {
     console.log(`Getting user ${id}`);
     return this.repository.get(id);
   }
-  public async create(name: string, id: string): Promise<boolean> {
+  public async create(id: string, name: string): Promise<User> {
     console.log(`Creating account: `);
-    return this.repository.create(name, id ?? Random.id());
+    const user = new User(id, name);
+    return this.repository.create(user);
   }
 
   public async update(id: string, name: string): Promise<boolean> {

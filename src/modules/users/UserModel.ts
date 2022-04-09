@@ -4,7 +4,7 @@ export default class User {
   private _createdAt: Date;
   private _updatedAt: Date;
 
-  constructor(id, name, createdAt: Date, updatedAt: Date) {
+  constructor(id, name, createdAt: Date = new Date(), updatedAt: Date = new Date()) {
     this._id = id;
     this._name = name;
     this._createdAt = createdAt;

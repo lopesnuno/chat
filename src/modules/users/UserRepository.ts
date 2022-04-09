@@ -45,15 +45,17 @@ export default class UserRepository implements Repository<User> {
     return rowCount === 1;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
-  async create(name: string, id: string): Promise<boolean> {  //problems with typdes.d.ts
+  async create(user: User): Promise<User> {
+    const name = user.name;
+    const id = user.id;
     const { rowCount } = await this.db.connect((connection) =>
         connection.query(sql`
             INSERT INTO users(id, name, created_at, updated_at)
-            VALUES(${id}, ${name}, current_timestamp , current_timestamp);
+            VALUES(${id}, ${name}, ${user.createdAt.toISOString()} , ${user.updatedAt.toISOString()});
       `)
     );
 
-    return rowCount === 1;
+    if (rowCount === 1) return user
+    throw new Error('Failed to insert user... Unknown error')
   }
 }

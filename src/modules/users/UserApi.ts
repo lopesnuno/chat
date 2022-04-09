@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { Container } from 'typedi';
 
 import UserService from './UserService';
+import Random from "../../utils/random";
 
 async function getUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
   console.debug('Calling get user: %o', req.params.id);
@@ -21,11 +22,12 @@ async function createUser(req: Request, res: Response, next: NextFunction): Prom
   console.debug('Calling create user: %o', req.body);
   try {
     const service = Container.get<UserService>(UserService);
-    const { name, id } = req.body;
+    const { name } = req.body;
+    const id = Random.id();
 
-    const created = await service.create(name, id);
+    await service.create(id, name);
 
-    return res.status(200).json({ created });
+    return res.status(200).json({ id });
   } catch (e) {
     console.error('🔥 error: %o', e);
     return next(e);
