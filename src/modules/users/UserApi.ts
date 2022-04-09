@@ -32,7 +32,23 @@ async function updateUser(req: Request, res: Response, next: NextFunction): Prom
   }
 }
 
+async function deleteUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
+  console.debug('Calling delete user: %o', req.body);
+  try {
+    const service = Container.get<UserService>(UserService);
+    const { id } = req.body;
+
+    const deleted = await service.delete(id);
+
+    return res.status(200).json({ deleted });
+  } catch (e) {
+    console.error('🔥 error: %o', e);
+    return next(e);
+  }
+}
+
 export default (app: Router): void => {
   app.get('/user/:id', getUser);
   app.put('/user/', updateUser);
+  app.delete('/user/', deleteUser);
 };

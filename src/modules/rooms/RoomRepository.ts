@@ -56,6 +56,18 @@ export default class RoomRepository implements Repository<Room> {
 
     return rowCount === 1;
   }
+
+  async delete(id: string): Promise<boolean> {
+    const { rowCount } = await this.db.connect((connection) =>
+        connection.query(sql`
+          DELETE
+          FROM rooms
+          WHERE id = ${id};
+        `)
+    );
+
+    return rowCount === 1;
+  }
 }
 
 
