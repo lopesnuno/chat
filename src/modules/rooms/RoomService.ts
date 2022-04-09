@@ -18,7 +18,7 @@ export default class RoomService {
   }
 
   public async create(name: string, id: string, owner: string): Promise<boolean> {
-    console.log(`Creating account: `);
+    console.log(`Creating room: `);
     return this.repository.create(name, id ?? Random.id(), owner);
   }
 
