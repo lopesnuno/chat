@@ -3,6 +3,8 @@ import { Container } from 'typedi';
 
 import RoomService from './RoomService';
 
+import Random from "../../utils/random";
+
 async function getRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
   console.debug('Calling get room: %o', req.params.id);
   try {
@@ -21,11 +23,13 @@ async function createRoom(req: Request, res: Response, next: NextFunction): Prom
   console.debug('Calling create room: %o', req.body);
   try {
     const service = Container.get<RoomService>(RoomService);
-    const { name, id, owner } = req.body;
+    const { name } = req.body;
+    const id = Random.id();
+    const owner = '6jrHnwiHihRNeWqrKirW'  //TODO: replace when we have authentication
 
-    const created = await service.create(name, id, owner);
+    await service.create(id, name, owner);
 
-    return res.status(200).json({ created });
+    return res.status(200).json({ id });
   } catch (e) {
     console.error('🔥 error: %o', e);
     return next(e);

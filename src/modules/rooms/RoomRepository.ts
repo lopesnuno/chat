@@ -32,15 +32,16 @@ export default class RoomRepository implements Repository<Room> {
     return new Room(room.id, room.name, new Date(room.created_at as number), new Date(room.updated_at as number));
   }
 
-  async create(name: string, id: string, owner: string): Promise<boolean> {  //problems with typdes.d.ts
+  async create(room: Room): Promise<Room> {
     const { rowCount } = await this.db.connect((connection) =>
         connection.query(sql`
             INSERT INTO rooms(id, name, created_at, updated_at, owner)
-            VALUES(${id}, ${name}, current_timestamp , current_timestamp, ${owner});
+            VALUES(${room.id}, ${room.name}, ${room.createdAt.toISOString()} , ${room.updatedAt.toISOString()}, ${room.owner});
       `)
     );
 
-    return rowCount === 1;
+    if (rowCount === 1) return room;
+    throw new Error('Failed to insert room... Unknown error')
   }
 
   async update(id: string, name: string): Promise<boolean> {

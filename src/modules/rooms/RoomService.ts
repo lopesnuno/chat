@@ -2,7 +2,6 @@ import { Inject, Service } from 'typedi';
 
 import RoomRepository from './RoomRepository';
 import Room from './RoomModel';
-import Random from '../../utils/random';
 
 @Service()
 export default class RoomService {
@@ -17,9 +16,10 @@ export default class RoomService {
     return this.repository.get(id);
   }
 
-  public async create(name: string, id: string, owner: string): Promise<boolean> {
+  public async create(id: string, name: string, owner: string): Promise<Room> {
     console.log(`Creating room: `);
-    return this.repository.create(name, id ?? Random.id(), owner);
+    const room = new Room(id, name, owner, new Date(), new Date())
+    return this.repository.create(room);
   }
 
   public async update(id: string, name: string): Promise<boolean> {
