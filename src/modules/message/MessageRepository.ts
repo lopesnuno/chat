@@ -1,0 +1,37 @@
+import { Inject, Service } from 'typedi';
+
+import { DatabasePool, sql } from 'slonik';
+
+import { Repository } from '../../types';
+
+import Message from './MessageModel';
+
+@Service()
+export default class MessageRepository implements Repository<Message> {
+  constructor(
+    @Inject('db')
+    private db: DatabasePool
+  ) {
+  }
+
+  async insert(message: Message): Promise<Message> {
+    const id = message.id;
+    const content = message.content;
+    const senderId = message.senderId;
+    const recipientId = message.recipientId;
+    const replyTo = message.replyTo;
+    const roomId = message.roomId;
+
+    const { rowCount } = await this.db.connect((connection) =>
+        connection.query(sql`
+          INSERT INTO messages(id, send_at, message, sender_id, recipient_id, reply_to, rooms_id)
+          VALUES(${id}, ${message.sendAt.toISOString()}, ${content}, ${senderId}, ${recipientId}, ${replyTo}, ${roomId});
+        `)
+    );
+
+    if (rowCount === 1) return message
+    throw new Error('Failed to insert message... Unknown error')
+  }
+}
+
+
