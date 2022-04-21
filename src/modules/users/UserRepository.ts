@@ -6,6 +6,7 @@ import { Repository } from '../../types';
 
 import User from './UserModel';
 
+
 @Service()
 export default class UserRepository implements Repository<User> {
   constructor(
@@ -44,6 +45,21 @@ export default class UserRepository implements Repository<User> {
     return rowCount === 1;
   }
 
+
+  async create(user: User): Promise<User> {
+    const name = user.name;
+    const id = user.id;
+    const {rowCount} = await this.db.connect((connection) =>
+        connection.query(sql`
+          INSERT INTO users(id, name, created_at, updated_at)
+          VALUES (${id}, ${name}, ${user.createdAt.toISOString()}, ${user.updatedAt.toISOString()});
+        `)
+    );
+
+    if (rowCount === 1) return user
+    throw new Error('Failed to insert user... Unknown error')
+  }
+
   async delete(id: string): Promise<boolean> {
     const { rowCount } = await this.db.connect((connection) =>
         connection.query(sql`
@@ -54,10 +70,5 @@ export default class UserRepository implements Repository<User> {
     );
 
     return rowCount === 1;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
-  create(o: User): Promise<User> {
-    return Promise.resolve(undefined);
   }
 }
