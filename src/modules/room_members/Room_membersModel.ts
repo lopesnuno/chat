@@ -4,7 +4,7 @@ export default class RoomMembers {
   private _userId: string;
   private _joinedAt: Date;
 
-  constructor(id, joinedAt: Date = new Date(), roomId, userId) {
+  constructor(id, roomId, userId, joinedAt: Date = new Date()) {
     this._id = id;
     this._roomId = roomId;
     this._userId = userId;
