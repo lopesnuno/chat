@@ -14,7 +14,19 @@ export default class MessageRepository implements Repository<Message> {
   ) {
   }
 
-  async insert(message: Message): Promise<Message> {
+  get(id: string): Promise<Message> {
+    throw new Error('Method not implemented.');
+  }
+
+  update(id: string, name: string): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
+
+  delete(id: string): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
+
+  async create(message: Message): Promise<Message> {
     const id = message.id;
     const content = message.content;
     const senderId = message.senderId;

@@ -5,14 +5,14 @@ import MessageService from './MessageService';
 
 import Random from "../../utils/random";
 
-async function insert(req: Request, res: Response, next: NextFunction): Promise<Response> {
+async function create(req: Request, res: Response, next: NextFunction): Promise<Response> {
   console.debug('Calling insert message: %o', req.body);
   try{
     const service = Container.get<MessageService>(MessageService);
     const { content, senderId, recipientId, replyTo, roomId } = req.body;
     const id = Random.id();
 
-    await service.insert(id, content, senderId, recipientId, replyTo, roomId);
+    await service.create(id, content, senderId, recipientId, replyTo, roomId);
 
     return res.status(200). json({ id })
   } catch(e){
@@ -22,5 +22,5 @@ async function insert(req: Request, res: Response, next: NextFunction): Promise<
 }
 
 export default (app: Router): void => {
-  app.post('/message/', insert);
+  app.post('/message/', create);
 };
