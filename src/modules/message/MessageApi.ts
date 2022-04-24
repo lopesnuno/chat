@@ -5,7 +5,7 @@ import MessageService from './MessageService';
 
 
 async function deleteMessage(req: Request, res: Response, next: NextFunction): Promise<Response> {
-    console.debug('Calling insert message: %o', req.body);
+    console.debug('Calling delete message: %o', req.body);
     try{
         const service = Container.get<MessageService>(MessageService);
         const { id } = req.body;
