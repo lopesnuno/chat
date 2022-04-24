@@ -5,7 +5,7 @@ import RoomMembersService from './RoomMembersService';
 
 
 async function deleteUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
-    console.debug('Calling insert user: %o', req.body);
+    console.debug('Calling delete room member: %o', req.body);
     try{
         const service = Container.get<RoomMembersService>(RoomMembersService);
         const { id } = req.body;

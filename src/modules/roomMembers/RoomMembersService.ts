@@ -11,7 +11,7 @@ export default class RoomMembersService {
     }
 
     public async delete(id: string): Promise<boolean> {
-        console.log(`Deleting from room: ${id}`);
+        console.log(`Deleting member from room: ${id}`);
         return this.repository.delete(id);
     }
 }
