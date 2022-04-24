@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { Container } from 'typedi';
 
-import Room_membersService from './Room_membersService';
+import RoomMembersService from './RoomMembersService';
 
 import Random from "../../utils/random";
 
 async function create(req: Request, res: Response, next: NextFunction): Promise<Response> {
   console.debug('Calling insert user: %o', req.body);
   try{
-    const service = Container.get<Room_membersService>(Room_membersService);
+    const service = Container.get<RoomMembersService>(RoomMembersService);
     const { roomId, userId } = req.body;
     const id = Random.id();
 
@@ -22,5 +22,5 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
 }
 
 export default (app: Router): void => {
-  app.post('/room_members/', create);
+  app.post('/roomMembers/', create);
 };

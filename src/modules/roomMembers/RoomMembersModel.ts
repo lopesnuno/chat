@@ -1,4 +1,4 @@
-export default class RoomMembers {
+export default class RoomMember {
   private _id: string;
   private _roomId: string;
   private _userId: string;
