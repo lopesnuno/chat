@@ -18,7 +18,7 @@ export default class MessageRepository implements Repository<Message> {
     throw new Error('Method not implemented.');
   }
 
-  update(id: string, name: string): Promise<boolean> {
+  update(o: Message): Promise<boolean> {
     throw new Error('Method not implemented.');
   }
 
