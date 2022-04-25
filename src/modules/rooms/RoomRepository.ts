@@ -14,10 +14,6 @@ export default class RoomRepository implements Repository<Room> {
   ) {
   }
 
-  async create(o: Room): Promise<Room> {
-
-    return Promise.resolve(o);
-  }
 
   async get(id: string): Promise<Room | null> {
     const { rows, rowCount } = await this.db.connect((connection) =>
@@ -34,6 +30,18 @@ export default class RoomRepository implements Repository<Room> {
     const room = rows[0];
 
     return new Room(room.id, room.name, new Date(room.created_at as number), new Date(room.updated_at as number));
+  }
+
+  async create(room: Room): Promise<Room> {
+    const { rowCount } = await this.db.connect((connection) =>
+        connection.query(sql`
+            INSERT INTO rooms(id, name, created_at, updated_at, owner)
+            VALUES(${room.id}, ${room.name}, ${room.createdAt.toISOString()} , ${room.updatedAt.toISOString()}, ${room.owner});
+      `)
+    );
+
+    if (rowCount === 1) return room;
+    throw new Error('Failed to insert room... Unknown error')
   }
 
   async update(id: string, name: string): Promise<boolean> {

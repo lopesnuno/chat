@@ -16,6 +16,11 @@ export default class UserService {
     console.log(`Getting user ${id}`);
     return this.repository.get(id);
   }
+  public async create(id: string, name: string): Promise<User> {
+    console.log(`Creating account: `);
+    const user = new User(id, name);
+    return this.repository.create(user);
+  }
 
   public async update(id: string, name: string): Promise<boolean> {
     console.log(`Updating user ${id}`);

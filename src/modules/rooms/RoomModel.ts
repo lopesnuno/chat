@@ -1,12 +1,14 @@
 export default class Room {
   private _id: string;
   private _name: string;
+  private _owner: string;
   private _createdAt: Date;
   private _updatedAt: Date;
 
-  constructor(id, name, createdAt: Date, updatedAt: Date) {
+  constructor(id, name, owner, createdAt: Date = new Date(), updatedAt: Date = new Date()) {
     this._id = id;
     this._name = name;
+    this._owner = owner;
     this._createdAt = createdAt;
     this._updatedAt = updatedAt;
   }
@@ -50,5 +52,13 @@ export default class Room {
 
   set updatedAt(value: Date) {
     this._updatedAt = value;
+  }
+
+  get owner(): string {
+    return this._owner;
+  }
+
+  set owner(value: string) {
+    this._owner = value;
   }
 }
