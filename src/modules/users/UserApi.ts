@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { Container } from 'typedi';
 
+import * as Auth from '../../middlewares/auth.middleware';
+
 import UserService from './UserService';
 import Random from "../../utils/random";
 
@@ -39,8 +41,13 @@ async function updateUser(req: Request, res: Response, next: NextFunction): Prom
   try {
     const service = Container.get<UserService>(UserService);
     const { id, name } = req.body;
+    const user = await service.get(id);
 
     const updated = await service.update(id, name);
+
+    if(user.id !== req.user.id){
+      return res.status(401).json({message: "Not enough privileges"})
+    }
 
     return res.status(200).json({ updated });
   } catch (e) {
@@ -54,8 +61,13 @@ async function deleteUser(req: Request, res: Response, next: NextFunction): Prom
   try {
     const service = Container.get<UserService>(UserService);
     const { id } = req.body;
+    const user = await service.get(id);
 
     const deleted = await service.delete(id);
+
+    if(user.id !== req.user.id){
+      return res.status(401).json({message: "Not enough privileges"})
+    }
 
     return res.status(200).json({ deleted });
   } catch (e) {
@@ -65,8 +77,8 @@ async function deleteUser(req: Request, res: Response, next: NextFunction): Prom
 }
 
 export default (app: Router): void => {
-  app.post('/user', createUser);
-  app.get('/user/:id', getUser);
-  app.put('/user/', updateUser);
-  app.delete('/user/', deleteUser);
+  app.post('/user', Auth.authorize([]), createUser);
+  app.get('/user/:id', Auth.authorize([]), getUser);
+  app.put('/user/', Auth.authorize([]), updateUser);
+  app.delete('/user/', Auth.authorize([]), deleteUser);
 };
