@@ -22,7 +22,7 @@ interface TokenPayload {
 }
 
 export function validateToken(token: string): Promise<TokenPayload> {
-    const publicKey = fs.readFileSync(path.join(__dirname, '../../public.key'));
+    const publicKey = fs.readFileSync(path.join(__dirname, '../../generate-token/public.key'));
 
     const verifyOptions: VerifyOptions = {
         algorithms: ['RS256'],
