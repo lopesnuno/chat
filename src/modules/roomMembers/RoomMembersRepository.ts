@@ -22,9 +22,17 @@ export default class RoomMembersRepository implements Repository<RoomMember> {
     throw new Error('Method not implemented.');
   }
 
-  delete(id: string): Promise<boolean> {
-    throw new Error('Method not implemented.');
-  }
+    async delete(id: string): Promise<boolean> {
+        const {rowCount} = await this.db.connect((connection) =>
+            connection.query(sql`
+                DELETE
+                FROM room_members
+                WHERE id = ${id}
+            `)
+        );
+
+        return rowCount === 1;
+    }
 
   async create(roomMember: RoomMember): Promise<RoomMember> {
     const id = roomMember.id;
