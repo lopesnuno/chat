@@ -1,6 +1,18 @@
-import { verify, VerifyOptions } from 'jsonwebtoken';
+import { sign, verify, VerifyOptions } from 'jsonwebtoken';
 import * as fs from 'fs';
 import * as path from 'path';
+
+export function payload() {
+    const payload = {
+        name: 'Rafa',
+        userId: '6jrHnwiHihRNeWqrKirW',
+        roles: [
+            'admin'
+        ]
+    };
+
+    return sign(payload);
+}
 
 interface TokenPayload {
     exp: number;

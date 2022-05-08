@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { Container } from 'typedi';
 
+import * as Auth from '../../middlewares/auth.middleware';
+
 import MessageService from './MessageService';
 
 import Random from "../../utils/random";
@@ -22,5 +24,5 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
 }
 
 export default (app: Router): void => {
-  app.post('/message/', create);
+  app.post('/message/', Auth.authorize([]), create);
 };

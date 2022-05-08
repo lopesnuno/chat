@@ -79,7 +79,7 @@ async function deleteRoom(req: Request, res: Response, next: NextFunction): Prom
 }
 
 export default (app: Router): void => {
-  app.post('/room/', Auth.authorize([]), createRoom);
+  app.post('/room/', Auth.authorize([]),createRoom);
   app.get('/room/:id', Auth.authorize([]), getRoom);
   app.put('/room/', Auth.authorize([]), updateRoom);
   app.delete('/room/', Auth.authorize([]), deleteRoom);

@@ -1,4 +1,6 @@
 import { sign, SignOptions } from 'jsonwebtoken';
+import * as fs from "fs";
+import * as path from "path";
 
 export function generateToken() {
     const payload = {
@@ -8,7 +10,7 @@ export function generateToken() {
             'user',
         ]
     };
-    const privateKey = fs.readFileSync(path.join(__dirname, '../../private.key'));
+    const privateKey = fs.readFileSync(path.join(__dirname, './private.key'));
 
     const signInOptions: SignOptions = {
         algorithm: 'RS256',
@@ -17,3 +19,5 @@ export function generateToken() {
 
     return sign(payload, privateKey, signInOptions);
 }
+
+console.log(generateToken());
