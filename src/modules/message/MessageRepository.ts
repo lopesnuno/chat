@@ -18,8 +18,20 @@ export default class MessageRepository implements Repository<Message> {
         throw new Error('Method not implemented.');
     }
 
-    update(o: Message): Promise<boolean> {
-        throw new Error('Method not implemented.');
+    async update(o: Message): Promise<boolean> {
+        const id = o.id;
+        const content = o.content;
+
+        const {rowCount} = await this.db.connect((connection) =>
+            connection.query(sql`
+                UPDATE messages
+                SET message = ${content},
+                    send_at = ${o.sendAt.toISOString()}
+                WHERE id = ${id}
+            `)
+        );
+
+        return rowCount === 1;
     }
 
     async create(message: Message): Promise<Message> {
@@ -30,11 +42,12 @@ export default class MessageRepository implements Repository<Message> {
         const replyTo = message.replyTo;
         const roomId = message.roomId;
 
-        const { rowCount } = await this.db.connect((connection) =>
+        const {rowCount} = await this.db.connect((connection) =>
             connection.query(sql`
-          INSERT INTO messages(id, send_at, message, sender_id, recipient_id, reply_to, rooms_id)
-          VALUES(${id}, ${message.sendAt.toISOString()}, ${content}, ${senderId}, ${recipientId}, ${replyTo}, ${roomId});
-        `)
+                INSERT INTO messages(id, send_at, message, sender_id, recipient_id, reply_to, rooms_id)
+                VALUES (${id}, ${message.sendAt.toISOString()}, ${content}, ${senderId}, ${recipientId}, ${replyTo},
+                        ${roomId});
+            `)
         );
 
         if (rowCount === 1) return message
