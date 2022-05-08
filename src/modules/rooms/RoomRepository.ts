@@ -44,7 +44,10 @@ export default class RoomRepository implements Repository<Room> {
     throw new Error('Failed to insert room... Unknown error')
   }
 
-  async update(id: string, name: string): Promise<boolean> {
+  async update(room: Room): Promise<boolean> {
+    const id = room.id;
+    const name = room.name;
+
     const { rowCount } = await this.db.connect((connection) =>
         connection.query(sql`
           UPDATE rooms
