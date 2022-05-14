@@ -5,10 +5,7 @@ import * as path from 'path';
 export function payload() {
     const payload = {
         name: '',
-        userId: '',
-        roles: [
-            ''
-        ]
+        userId: ''
     };
 
     return sign(payload);

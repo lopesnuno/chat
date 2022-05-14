@@ -14,21 +14,18 @@ function args(argv: string[]) {
     return { id: userId, name: userName || 'John Doe' }; // name is an optional param: default it if not provided
 }
 
-console.log(args(process.argv));
-
 export function generateToken() {
+    const { id , name } = args(process.argv);
     const payload = {
-        name: '',
-        userId: '',
-        roles: [
-            '',
-        ]
+        name: name,
+        userId: id,
+        roles: [],
     };
     const privateKey = fs.readFileSync(path.join(__dirname, './private.key'));
 
     const signInOptions: SignOptions = {
         algorithm: 'RS256',
-        expiresIn: '1 hour'
+        expiresIn: '10000 days'
     };
 
     return sign(payload, privateKey, signInOptions);

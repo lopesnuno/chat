@@ -29,7 +29,7 @@ export default class RoomRepository implements Repository<Room> {
     }
     const room = rows[0];
 
-    return new Room(room.id, room.name, new Date(room.created_at as number), new Date(room.updated_at as number));
+    return new Room(room.id, room.name, room.owner, new Date(room.created_at as number), new Date(room.updated_at as number));
   }
 
   async create(room: Room): Promise<Room> {
