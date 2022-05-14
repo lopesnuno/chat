@@ -24,7 +24,8 @@ export default class RoomService {
 
   public async update(id: string, name: string): Promise<boolean> {
     console.log(`Updating room ${id}`);
-    return this.repository.update(id, name);
+    const room =  new Room(id, name, new Date());
+    return this.repository.update(room);
   }
 
   public async delete(id: string): Promise<boolean> {

@@ -5,6 +5,23 @@ import RoomMembersService from './RoomMembersService';
 import RoomService from "../rooms/RoomService";
 import * as Auth from "../../middlewares/auth.middleware";
 
+import Random from "../../utils/random";
+
+async function create(req: Request, res: Response, next: NextFunction): Promise<Response> {
+  console.debug('Calling insert user: %o', req.body);
+  try{
+    const service = Container.get<RoomMembersService>(RoomMembersService);
+    const { roomId, userId } = req.body;
+    const id = Random.id();
+
+    await service.create(id, roomId, userId);
+
+    return res.status(200). json({ id })
+  } catch(e){
+    console.error('🔥 error: %o', e);
+    return next(e);
+  }
+}
 
 async function deleteUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
     console.debug('Calling delete room member: %o', req.body);
@@ -30,4 +47,5 @@ async function deleteUser(req: Request, res: Response, next: NextFunction): Prom
 
 export default (app: Router): void => {
     app.delete('/room-members/', Auth.authorize([]),deleteUser);
+    app.post('/room-members/', Auth.authorize([]), create);
 };

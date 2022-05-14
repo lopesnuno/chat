@@ -32,7 +32,10 @@ export default class UserRepository implements Repository<User> {
     return new User(user.id, user.name, new Date(user.created_at as number), new Date(user.updated_at as number));
   }
 
-  async update(id: string, name: string): Promise<boolean> {
+  async update(user: User): Promise<boolean> {
+    const id = user.id;
+    const name = user.name;
+
     const { rowCount } = await this.db.connect((connection) =>
         connection.query(sql`
           UPDATE users
