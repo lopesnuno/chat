@@ -14,8 +14,21 @@ export default class MessageRepository implements Repository<Message> {
     ) {
     }
 
-    get(id: string): Promise<Message> {
-        throw new Error('Method not implemented.');
+    async get(id: string): Promise<Message> {
+        const { rows, rowCount } = await this.db.connect((connection) =>
+            connection.query(sql`
+          SELECT *
+          FROM messages
+          WHERE id = ${id};
+      `)
+        );
+
+        if (rowCount === 0) {
+            return null;
+        }
+        const message = rows[0];
+
+        return new Message(message.id, message.content, message.senderId, message.recipientId, message.replyTo, message.roomId, new Date(message.sendAt as number));
     }
 
     update(o: Message): Promise<boolean> {
