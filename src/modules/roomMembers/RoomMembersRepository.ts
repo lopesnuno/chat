@@ -30,7 +30,7 @@ export default class RoomMembersRepository implements Repository<RoomMember> {
             connection.query(sql`
                 DELETE
                 FROM room_members
-                WHERE id = ${id}
+                WHERE user_id = ${id}
             `)
         );
 

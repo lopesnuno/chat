@@ -4,10 +4,10 @@ import * as path from 'path';
 
 export function payload() {
     const payload = {
-        name: 'Rafa',
-        userId: '6jrHnwiHihRNeWqrKirW',
+        name: '',
+        userId: '',
         roles: [
-            'admin'
+            ''
         ]
     };
 
@@ -22,7 +22,7 @@ interface TokenPayload {
 }
 
 export function validateToken(token: string): Promise<TokenPayload> {
-    const publicKey = fs.readFileSync(path.join(__dirname, '../../generate-token/public.key'));
+    const publicKey = fs.readFileSync(path.join(__dirname, '../../tools/public.key'));
 
     const verifyOptions: VerifyOptions = {
         algorithms: ['RS256'],

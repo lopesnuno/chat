@@ -11,10 +11,10 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
   console.debug('Calling insert message: %o', req.body);
   try{
     const service = Container.get<MessageService>(MessageService);
-    const { content, senderId, recipientId, replyTo, roomId } = req.body;
+    const { content, recipientId, replyTo, roomId } = req.body;
     const id = Random.id();
 
-    await service.create(id, content, senderId, recipientId, replyTo, roomId);
+    await service.create(id, content, req.user.id, recipientId, replyTo, roomId);
 
     return res.status(200). json({ id })
   } catch(e){
@@ -28,6 +28,11 @@ async function deleteMessage(req: Request, res: Response, next: NextFunction): P
     try{
         const service = Container.get<MessageService>(MessageService);
         const { id } = req.body;
+        const message = await service.get(id);
+
+        if(message.senderId !== req.user.id){
+            return res.status(401).json({message: 'Not enough privileges'})
+        }
 
         const deleted = await service.delete(id);
 

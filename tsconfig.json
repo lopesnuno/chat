@@ -26,7 +26,8 @@
     "esModuleInterop": true
   },
   "include": [
-    "./src/**/*"
+    "./src/**/*",
+    "./tools/**/*"
   ],
   "exclude": [
     "node_modules",
