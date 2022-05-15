@@ -13,8 +13,21 @@ export default class MessageRepository implements Repository<Message> {
     private db: DatabasePool
   ) {}
 
-  get(id: string): Promise<Message> {
-    throw new Error(`Method not implemented. ${id}`);
+  async get(id: string): Promise<Message | null> {
+    const { rows, rowCount } = await this.db.connect((connection) =>
+        connection.query(sql`
+          SELECT *
+          FROM messages
+          WHERE id = ${id};
+      `)
+    );
+
+    if (rowCount === 0) {
+      return null;
+    }
+    const messages = rows[0];
+
+    return new Message(messages.id, messages.message, messages.sender_id, messages.recipient_id, messages.reply_to, messages. room_id, new Date(messages.send_at as number));
   }
 
   update(o: Message): Promise<boolean> {
