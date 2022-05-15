@@ -15,11 +15,11 @@ export default class MessageRepository implements Repository<Message> {
     }
 
     get(id: string): Promise<Message> {
-        throw new Error('Method not implemented.');
+        throw new Error(`Method not implemented. ${id}`);
     }
 
     update(o: Message): Promise<boolean> {
-        throw new Error('Method not implemented.');
+      throw new Error(`Method not implemented. ${o.id}`);
     }
 
     async create(message: Message): Promise<Message> {
@@ -37,18 +37,20 @@ export default class MessageRepository implements Repository<Message> {
         `)
         );
 
-        if (rowCount === 1) return message
-        throw new Error('Failed to insert message... Unknown error')
+      if (rowCount === 1) {
+        return message;
+      }
+      throw new Error('Failed to insert message... Unknown error');
     }
 
     async delete(id: string): Promise<boolean> {
-        const {rowCount} = await this.db.connect((connection) =>
-            connection.query(sql`
-                DELETE
-                FROM messages
-                WHERE id = ${id}
-            `)
-        );
+      const { rowCount } = await this.db.connect((connection) =>
+        connection.query(sql`
+            DELETE
+            FROM messages
+            WHERE id = ${id}
+        `)
+      );
 
         return rowCount === 1;
     }

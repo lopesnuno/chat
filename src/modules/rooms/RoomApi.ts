@@ -1,11 +1,12 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router, RequestHandler } from 'express';
 import { Container } from 'typedi';
+
+import Random from '../../utils/random';
 
 import RoomService from './RoomService';
 
-import Random from "../../utils/random";
 
-async function getRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
+const getRoom: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling get room: %o', req.params.id);
   try {
     const service = Container.get<RoomService>(RoomService);
@@ -17,15 +18,15 @@ async function getRoom(req: Request, res: Response, next: NextFunction): Promise
     console.error('🔥 error: %o', e);
     return next(e);
   }
-}
+};
 
-async function createRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
+const createRoom: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling create room: %o', req.body);
   try {
     const service = Container.get<RoomService>(RoomService);
     const { name } = req.body;
     const id = Random.id();
-    const owner = '6jrHnwiHihRNeWqrKirW'  //TODO: replace when we have authentication
+    const owner = '6jrHnwiHihRNeWqrKirW';  //TODO: replace when we have authentication
 
     await service.create(id, name, owner);
 
@@ -34,9 +35,9 @@ async function createRoom(req: Request, res: Response, next: NextFunction): Prom
     console.error('🔥 error: %o', e);
     return next(e);
   }
-}
+};
 
-async function updateRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
+const updateRoom: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling update room: %o', req.body);
   try {
     const service = Container.get<RoomService>(RoomService);
@@ -49,9 +50,9 @@ async function updateRoom(req: Request, res: Response, next: NextFunction): Prom
     console.error('🔥 error: %o', e);
     return next(e);
   }
-}
+};
 
-async function deleteRoom(req: Request, res: Response, next: NextFunction): Promise<Response> {
+const deleteRoom: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling delete room: %o', req.body);
   try {
     const service = Container.get<RoomService>(RoomService);
@@ -64,7 +65,7 @@ async function deleteRoom(req: Request, res: Response, next: NextFunction): Prom
     console.error('🔥 error: %o', e);
     return next(e);
   }
-}
+};
 
 export default (app: Router): void => {
   app.post('/room/', createRoom);

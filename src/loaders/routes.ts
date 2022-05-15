@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-import messageApi from "../modules/message/MessageApi";
+import messageApi from '../modules/message/MessageApi';
 import usersApi from '../modules/users/UserApi';
 import roomsApi from '../modules/rooms/RoomApi';
-import roomMembersApi from "../modules/roomMembers/RoomMembersApi";
+import roomMembersApi from '../modules/roomMembers/RoomMembersApi';
 
 
 export default (): Router => {

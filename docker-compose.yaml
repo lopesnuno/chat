@@ -27,6 +27,6 @@ services:
       - /opt/app/node_modules
     image: 'chat-web'
     ports:
-      - 5000:5000
+      - '5000:5000'
     depends_on:
       - chat-db
