@@ -1,13 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
+
+import { Container } from 'typedi';
+
 import { validateToken } from '../utils/jwt.utils';
-import {Container} from "typedi";
-import UserService from "../modules/users/UserService";
+
+import UserService from '../modules/users/UserService';
 
 /**
  * middleware to check whether user has access to a specific endpoint
  *
  * @param allowedRoles list of allowed access types of a specific endpoint
  */
+
+// eslint-disable-next-line import/prefer-default-export
 export const authorize = (allowedRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {
         let jwt = req.headers.authorization;
@@ -34,6 +39,7 @@ export const authorize = (allowedRoles: string[]) => async (req: Request, res: R
         }
 
         const service = Container.get<UserService>(UserService);
+
         req.user = await service.get(decodedToken.userId);
         next();
     } catch (error) {
@@ -44,4 +50,4 @@ export const authorize = (allowedRoles: string[]) => async (req: Request, res: R
 
         res.status(500).json({ message: 'Failed to authenticate user' });
     }
-}
+};

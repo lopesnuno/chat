@@ -1,11 +1,13 @@
 import { NextFunction, Request, RequestHandler, Response, Router } from 'express';
 import { Container } from 'typedi';
 
-import RoomMembersService from './RoomMembersService';
-import RoomService from "../rooms/RoomService";
-import * as Auth from "../../middlewares/auth.middleware";
+import Random from '../../utils/random';
 
-import Random from "../../utils/random";
+import RoomService from '../rooms/RoomService';
+
+import * as Auth from '../../middlewares/auth.middleware';
+
+import RoomMembersService from './RoomMembersService';
 
 const create: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling insert user: %o', req.body);
@@ -33,7 +35,7 @@ const deleteUser: RequestHandler = async (req: Request, res: Response, next: Nex
         const room = await roomService.get(roomId);
 
         if(room.owner !== req.user.id){
-            return res.status(401).json({message: 'Not enough privileges'})
+            return res.status(401).json({ message: 'Not enough privileges' });
         }
 
         const deleted = await service.delete(userId, roomId);
@@ -46,6 +48,6 @@ const deleteUser: RequestHandler = async (req: Request, res: Response, next: Nex
 };
 
 export default (app: Router): void => {
-    app.delete('/room-members/', Auth.authorize([]),deleteUser);
+    app.delete('/room-members/', Auth.authorize([]), deleteUser);
     app.post('/room-members/', Auth.authorize([]), create);
 };

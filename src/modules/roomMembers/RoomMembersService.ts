@@ -14,7 +14,8 @@ export default class RoomMembersService {
 
   public async delete(userId: string, roomId: string): Promise<boolean> {
     console.log(`Deleting member from room: ${roomId}`);
-    const key = {userId, roomId}
+    const key = { userId, roomId };
+
     return this.repository.delete(key);
   }
 

@@ -3,9 +3,9 @@ import { Container } from 'typedi';
 
 import * as Auth from '../../middlewares/auth.middleware';
 
-import RoomService from './RoomService';
+import Random from '../../utils/random';
 
-import Random from "../../utils/random";
+import RoomService from './RoomService';
 
 const getRoom: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling get room: %o', req.params.id);
@@ -46,7 +46,7 @@ const updateRoom: RequestHandler = async (req: Request, res: Response, next: Nex
     const room = await service.get(id);
 
     if(room.owner !== req.user.id) {
-      return res.status(401).json({message: 'Not enough privileges'})
+      return res.status(401).json({ message: 'Not enough privileges' });
     }
 
     const updated = await service.update(id, name);
@@ -66,7 +66,7 @@ const deleteRoom: RequestHandler = async (req: Request, res: Response, next: Nex
     const room = await service.get(id);
 
     if(room.owner !== req.user.id){
-      return res.status(401).json({message: 'Not enough privileges'})
+      return res.status(401).json({ message: 'Not enough privileges' });
     }
 
     const deleted = await service.delete(id);
@@ -79,7 +79,7 @@ const deleteRoom: RequestHandler = async (req: Request, res: Response, next: Nex
 };
 
 export default (app: Router): void => {
-  app.post('/room/', Auth.authorize([]),createRoom);
+  app.post('/room/', Auth.authorize([]), createRoom);
   app.get('/room/:id', Auth.authorize([]), getRoom);
   app.put('/room/', Auth.authorize([]), updateRoom);
   app.delete('/room/', Auth.authorize([]), deleteRoom);

@@ -14,7 +14,6 @@ export default class RoomRepository implements Repository<Room> {
   ) {
   }
 
-
   async get(id: string): Promise<Room | null> {
     const { rows, rowCount } = await this.db.connect((connection) =>
       connection.query(sql`
