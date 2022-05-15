@@ -6,7 +6,8 @@
   "scripts": {
     "start": "export NODE_ENV=development; nodemon",
     "lint": "eslint . --ext ts",
-    "test": "jest"
+    "test": "jest",
+    "token": "npx ts-node tools/generate-token.ts"
   },
   "author": "",
   "license": "ISC",

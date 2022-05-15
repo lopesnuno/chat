@@ -6,7 +6,6 @@ import { Repository } from '../../types';
 
 import User from './UserModel';
 
-
 @Service()
 export default class UserRepository implements Repository<User> {
   constructor(

@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response, Router, RequestHandler } from 'express';
 import { Container } from 'typedi';
 
+import * as Auth from '../../middlewares/auth.middleware';
+
 import Random from '../../utils/random';
 
 import RoomService from './RoomService';
-
 
 const getRoom: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling get room: %o', req.params.id);
@@ -26,7 +27,7 @@ const createRoom: RequestHandler = async (req: Request, res: Response, next: Nex
     const service = Container.get<RoomService>(RoomService);
     const { name } = req.body;
     const id = Random.id();
-    const owner = '6jrHnwiHihRNeWqrKirW';  //TODO: replace when we have authentication
+    const owner = req.user.id;
 
     await service.create(id, name, owner);
 
@@ -42,6 +43,11 @@ const updateRoom: RequestHandler = async (req: Request, res: Response, next: Nex
   try {
     const service = Container.get<RoomService>(RoomService);
     const { id, name } = req.body;
+    const room = await service.get(id);
+
+    if(room.owner !== req.user.id) {
+      return res.status(401).json({ message: 'Not enough privileges' });
+    }
 
     const updated = await service.update(id, name);
 
@@ -57,6 +63,11 @@ const deleteRoom: RequestHandler = async (req: Request, res: Response, next: Nex
   try {
     const service = Container.get<RoomService>(RoomService);
     const { id } = req.body;
+    const room = await service.get(id);
+
+    if(room.owner !== req.user.id){
+      return res.status(401).json({ message: 'Not enough privileges' });
+    }
 
     const deleted = await service.delete(id);
 
@@ -68,9 +79,8 @@ const deleteRoom: RequestHandler = async (req: Request, res: Response, next: Nex
 };
 
 export default (app: Router): void => {
-  app.post('/room/', createRoom);
-  app.get('/room/:id', getRoom);
-  app.put('/room/', updateRoom);
-  app.delete('/room/', deleteRoom);
-
+  app.post('/room/', Auth.authorize([]), createRoom);
+  app.get('/room/:id', Auth.authorize([]), getRoom);
+  app.put('/room/', Auth.authorize([]), updateRoom);
+  app.delete('/room/', Auth.authorize([]), deleteRoom);
 };
