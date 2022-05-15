@@ -7,7 +7,7 @@ import { Repository } from '../../types';
 import RoomMember from "./RoomMembersModel";
 
 @Service()
-export default class RoomMembersRepository implements Repository<RoomMember> {
+export default class RoomMembersRepository implements Repository<RoomMember, {userId: string, roomId: string}> {
   constructor(
     @Inject('db')
     private db: DatabasePool
@@ -22,17 +22,18 @@ export default class RoomMembersRepository implements Repository<RoomMember> {
     throw new Error('Method not implemented.');
   }
 
-    async delete(id: string): Promise<boolean> {
-        const {rowCount} = await this.db.connect((connection) =>
-            connection.query(sql`
-                DELETE
-                FROM room_members
-                WHERE user_id = ${id}
-            `)
-        );
+  async delete(key: {userId: string, roomId: string}): Promise<boolean> {
+    const {rowCount} = await this.db.connect((connection) =>
+        connection.query(sql`
+          DELETE
+          FROM room_members
+          WHERE user_id = ${key.userId}
+            AND room_id = ${key.roomId};
+        `)
+    );
 
-        return rowCount === 1;
-    }
+    return rowCount === 1;
+  }
 
   async create(roomMember: RoomMember): Promise<RoomMember> {
     const id = roomMember.id;

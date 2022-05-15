@@ -36,7 +36,7 @@ async function deleteUser(req: Request, res: Response, next: NextFunction): Prom
             return res.status(401).json({message: 'Not enough privileges'})
         }
 
-        const deleted = await service.delete(userId);
+        const deleted = await service.delete(userId, roomId);
 
         return res.status(200). json({ deleted })
     } catch(e){

@@ -1,15 +1,6 @@
-import { sign, verify, VerifyOptions } from 'jsonwebtoken';
+import { verify, VerifyOptions } from 'jsonwebtoken';
 import * as fs from 'fs';
 import * as path from 'path';
-
-export function payload() {
-    const payload = {
-        name: '',
-        userId: ''
-    };
-
-    return sign(payload);
-}
 
 interface TokenPayload {
     exp: number;
