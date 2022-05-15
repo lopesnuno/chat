@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, RequestHandler, Router } from 'express';
 import { Container } from 'typedi';
 
 import * as Auth from '../../middlewares/auth.middleware';
@@ -6,7 +6,7 @@ import * as Auth from '../../middlewares/auth.middleware';
 import UserService from './UserService';
 import Random from "../../utils/random";
 
-async function getUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
+const getUser: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling get user: %o', req.params.id);
   try {
     const service = Container.get<UserService>(UserService);
@@ -18,9 +18,9 @@ async function getUser(req: Request, res: Response, next: NextFunction): Promise
     console.error('🔥 error: %o', e);
     return next(e);
   }
-}
+};
 
-async function createUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
+const createUser: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling create user: %o', req.body);
   try {
     const service = Container.get<UserService>(UserService);
@@ -34,9 +34,9 @@ async function createUser(req: Request, res: Response, next: NextFunction): Prom
     console.error('🔥 error: %o', e);
     return next(e);
   }
-}
+};
 
-async function updateUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
+const updateUser: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling update user: %o', req.body);
   try {
     const service = Container.get<UserService>(UserService);
@@ -54,9 +54,9 @@ async function updateUser(req: Request, res: Response, next: NextFunction): Prom
     console.error('🔥 error: %o', e);
     return next(e);
   }
-}
+};
 
-async function deleteUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
+const deleteUser: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling delete user: %o', req.body);
   try {
     const service = Container.get<UserService>(UserService);
@@ -74,7 +74,7 @@ async function deleteUser(req: Request, res: Response, next: NextFunction): Prom
     console.error('🔥 error: %o', e);
     return next(e);
   }
-}
+};
 
 export default (app: Router): void => {
   app.post('/user', Auth.authorize([]), createUser);

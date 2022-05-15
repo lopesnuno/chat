@@ -40,8 +40,10 @@ export default class RoomRepository implements Repository<Room> {
       `)
     );
 
-    if (rowCount === 1) return room;
-    throw new Error('Failed to insert room... Unknown error')
+    if (rowCount === 1) {
+      return room;
+    }
+    throw new Error('Failed to insert room... Unknown error');
   }
 
   async update(room: Room): Promise<boolean> {
@@ -72,5 +74,3 @@ export default class RoomRepository implements Repository<Room> {
     return rowCount === 1;
   }
 }
-
-

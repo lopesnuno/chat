@@ -4,7 +4,7 @@ import { DatabasePool, sql } from 'slonik';
 
 import { Repository } from '../../types';
 
-import RoomMember from "./RoomMembersModel";
+import RoomMember from './RoomMembersModel';
 
 @Service()
 export default class RoomMembersRepository implements Repository<RoomMember, {userId: string, roomId: string}> {
@@ -15,11 +15,11 @@ export default class RoomMembersRepository implements Repository<RoomMember, {us
   }
 
   get(id: string): Promise<RoomMember> {
-    throw new Error('Method not implemented.');
+    throw new Error(`Method not implemented. ${id}`);
   }
 
   update(o: RoomMember): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    throw new Error(`Method not implemented. ${o.id}`);
   }
 
   async delete(key: {userId: string, roomId: string}): Promise<boolean> {
@@ -40,16 +40,16 @@ export default class RoomMembersRepository implements Repository<RoomMember, {us
     const roomId = roomMember.roomId;
     const userId = roomMember.userId;
 
-    const {rowCount} = await this.db.connect((connection) =>
-        connection.query(sql`
+    const { rowCount } = await this.db.connect((connection) =>
+      connection.query(sql`
           INSERT INTO room_members(id, joined_at, room_id, user_id)
           VALUES (${id}, ${roomMember.joinedAt.toISOString()}, ${roomId}, ${userId});
-        `)
+      `)
     );
 
-    if (rowCount === 1) return roomMember
-    throw new Error('Failed to insert message... Unknown error')
+    if (rowCount === 1) {
+      return roomMember;
+    }
+    throw new Error('Failed to insert message... Unknown error');
   }
 }
-
-

@@ -16,7 +16,7 @@ export default class RoomMember {
       id: this.id,
       roomId: this.roomId,
       userId: this.userId,
-      joinedAt: this.joinedAt,
+      joinedAt: this.joinedAt
     };
   }
 
