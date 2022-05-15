@@ -15,12 +15,14 @@ export default class MessageService {
     public async create(id: string, content: string, senderId: string, recipientId: string | null, replyTo: string | null, roomId: string | null): Promise<Message> {
         console.log(`Inserting message: "${content}" into room "${roomId}" `);
         const message = new Message(id, content, senderId, recipientId, replyTo, roomId);
+
         return this.repository.create(message);
     }
 
     public async update(id: string, content: string, senderId: string, recipientId: string, replyTo: string, roomId: string): Promise<boolean> {
         console.log(`Editing message: ${id}`);
         const message = new Message(id, content, senderId, recipientId, replyTo, roomId, new Date());
+
         return this.repository.update(message);
     }
 
@@ -29,6 +31,3 @@ export default class MessageService {
         return this.repository.delete(id);
     }
 }
-
-
-

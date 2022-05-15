@@ -40,11 +40,16 @@ export default class RoomRepository implements Repository<Room> {
       `)
     );
 
-    if (rowCount === 1) return room;
-    throw new Error('Failed to insert room... Unknown error')
+    if (rowCount === 1) {
+      return room;
+    }
+    throw new Error('Failed to insert room... Unknown error');
   }
 
-  async update(id: string, name: string): Promise<boolean> {
+  async update(room: Room): Promise<boolean> {
+    const id = room.id;
+    const name = room.name;
+
     const { rowCount } = await this.db.connect((connection) =>
         connection.query(sql`
           UPDATE rooms
@@ -69,5 +74,3 @@ export default class RoomRepository implements Repository<Room> {
     return rowCount === 1;
   }
 }
-
-

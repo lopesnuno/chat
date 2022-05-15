@@ -15,14 +15,14 @@ export default class MessageRepository implements Repository<Message> {
     }
 
     get(id: string): Promise<Message> {
-        throw new Error('Method not implemented.');
+        throw new Error(`Method not implemented. ${id}`);
     }
 
     async update(o: Message): Promise<boolean> {
         const id = o.id;
         const content = o.content;
 
-        const {rowCount} = await this.db.connect((connection) =>
+        const { rowCount } = await this.db.connect((connection) =>
             connection.query(sql`
                 UPDATE messages
                 SET message = ${content},
@@ -42,7 +42,7 @@ export default class MessageRepository implements Repository<Message> {
         const replyTo = message.replyTo;
         const roomId = message.roomId;
 
-        const {rowCount} = await this.db.connect((connection) =>
+        const { rowCount } = await this.db.connect((connection) =>
             connection.query(sql`
                 INSERT INTO messages(id, send_at, message, sender_id, recipient_id, reply_to, rooms_id)
                 VALUES (${id}, ${message.sendAt.toISOString()}, ${content}, ${senderId}, ${recipientId}, ${replyTo},
@@ -50,18 +50,20 @@ export default class MessageRepository implements Repository<Message> {
             `)
         );
 
-        if (rowCount === 1) return message
-        throw new Error('Failed to insert message... Unknown error')
+      if (rowCount === 1) {
+        return message;
+      }
+      throw new Error('Failed to insert message... Unknown error');
     }
 
     async delete(id: string): Promise<boolean> {
-        const {rowCount} = await this.db.connect((connection) =>
-            connection.query(sql`
-                DELETE
-                FROM messages
-                WHERE id = ${id}
-            `)
-        );
+      const { rowCount } = await this.db.connect((connection) =>
+        connection.query(sql`
+            DELETE
+            FROM messages
+            WHERE id = ${id}
+        `)
+      );
 
         return rowCount === 1;
     }
