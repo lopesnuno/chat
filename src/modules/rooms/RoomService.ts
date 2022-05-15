@@ -17,14 +17,16 @@ export default class RoomService {
   }
 
   public async create(id: string, name: string, owner: string): Promise<Room> {
-    console.log(`Creating room: `);
-    const room = new Room(id, name, owner, new Date(), new Date())
+    console.log('Creating room');
+    const room = new Room(id, name, owner, new Date(), new Date());
+
     return this.repository.create(room);
   }
 
   public async update(id: string, name: string): Promise<boolean> {
     console.log(`Updating room ${id}`);
     const room =  new Room(id, name, new Date());
+
     return this.repository.update(room);
   }
 

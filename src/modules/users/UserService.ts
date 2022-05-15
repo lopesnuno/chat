@@ -17,14 +17,16 @@ export default class UserService {
     return this.repository.get(id);
   }
   public async create(id: string, name: string): Promise<User> {
-    console.log(`Creating account: `);
+    console.log('Creating account');
     const user = new User(id, name);
+
     return this.repository.create(user);
   }
 
   public async update(id: string, name: string): Promise<boolean> {
     console.log(`Updating user ${id}`);
     const user = new User(id, name, new Date());
+
     return this.repository.update(user);
   }
 
