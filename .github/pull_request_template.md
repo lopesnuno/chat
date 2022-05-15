@@ -12,9 +12,11 @@ Address or Closes trello task #trello-url-for-task
 
 <!-- Please make sure you have addressed the following before opening a new Pull Request -->
 
-- [ ] Create any needed unit and/or integration tests :man_scientist:
+- [ ] Create any needed unit tests :man_scientist:
 - [ ] All tests passing :100: ?
 - [ ] Run lint commands and clean up any errors :rocket:
-  - `yarn lint` from root folder
-- [ ] Assign PR to yourself and select ~2 Reviewers
+  - `npm run lint` from root folder
+- [ ] Run test command and clean any errors :rocket:
+    - `npm run test` from root folder 
+- [ ] Assign PR to yourself and select reviewers
 - [ ] Add `Status: Work in progress` :label: *if applicable*
