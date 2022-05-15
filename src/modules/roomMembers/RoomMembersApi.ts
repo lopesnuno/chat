@@ -1,11 +1,12 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import { NextFunction, Request, RequestHandler, Response, Router } from 'express';
 import { Container } from 'typedi';
+
+import Random from '../../utils/random';
 
 import RoomMembersService from './RoomMembersService';
 
-import Random from "../../utils/random";
 
-async function create(req: Request, res: Response, next: NextFunction): Promise<Response> {
+const create: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling insert user: %o', req.body);
   try{
     const service = Container.get<RoomMembersService>(RoomMembersService);
@@ -14,14 +15,14 @@ async function create(req: Request, res: Response, next: NextFunction): Promise<
 
     await service.create(id, roomId, userId);
 
-    return res.status(200). json({ id })
+    return res.status(200). json({ id });
   } catch(e){
     console.error('🔥 error: %o', e);
-    return next(e);
+    next(e);
   }
-}
+};
 
-async function deleteUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
+const deleteUser: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     console.debug('Calling delete room member: %o', req.body);
     try{
         const service = Container.get<RoomMembersService>(RoomMembersService);
@@ -29,12 +30,12 @@ async function deleteUser(req: Request, res: Response, next: NextFunction): Prom
 
         const deleted = await service.delete(id);
 
-        return res.status(200). json({ deleted })
+        return res.status(200). json({ deleted });
     } catch(e){
         console.error('🔥 error: %o', e);
         return next(e);
     }
-}
+};
 
 export default (app: Router): void => {
     app.post('/roomMembers/', create);
