@@ -24,6 +24,13 @@ export default class MessageService {
         return this.repository.create(message);
     }
 
+    public async update(id: string, content: string, senderId: string, recipientId: string, replyTo: string, roomId: string): Promise<boolean> {
+        console.log(`Editing message: ${id}`);
+        const message = new Message(id, content, senderId, recipientId, replyTo, roomId, new Date());
+
+        return this.repository.update(message);
+    }
+
     public async delete(id: string): Promise<boolean> {
         console.log(`Deleting message: ${id} `);
         return this.repository.delete(id);
