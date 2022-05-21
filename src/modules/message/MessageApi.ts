@@ -1,6 +1,8 @@
 import { NextFunction, Request, RequestHandler, Response, Router } from 'express';
 import { Container } from 'typedi';
 
+import * as Auth from '../../middlewares/auth.middleware';
+
 import Random from '../../utils/random';
 
 import MessageService from './MessageService';
@@ -25,7 +27,17 @@ const update: RequestHandler = async (req: Request, res: Response, next: NextFun
     console.debug('Calling update message: %o', req.body);
     try {
         const service = Container.get<MessageService>(MessageService);
-        const { id, content, senderId, recipientId, replyTo, roomId } = req.body;
+        const { id, content } = req.body;
+        const message = await service.get(id);
+
+        const senderId = message.senderId;
+        const recipientId = message.recipientId;
+        const replyTo = message.replyTo;
+        const roomId = message.roomId;
+
+        if(message.senderId !== req.user.id){
+            return res.status(401).json({ message: 'Not enough privileges' });
+        }
 
         const updated = await service.update(id, content, senderId, recipientId, replyTo, roomId);
 
@@ -41,6 +53,11 @@ const deleteMessage: RequestHandler = async (req: Request, res: Response, next: 
     try{
         const service = Container.get<MessageService>(MessageService);
         const { id } = req.body;
+        const message = await service.get(id);
+
+        if(message.senderId !== req.user.id){
+            return res.status(401).json({ message: 'Not enough privileges' });
+        }
 
         const deleted = await service.delete(id);
 
@@ -52,9 +69,7 @@ const deleteMessage: RequestHandler = async (req: Request, res: Response, next: 
 };
 
 export default (app: Router): void => {
-    app.post('/message/', create);
-    app.put('/message/', update);
-    app.delete('/message/', deleteMessage);
+  app.post('/message/', Auth.authorize([]), create);
+    app.put('/message/', Auth.authorize([]),  update);
+    app.delete('/message/', Auth.authorize([]), deleteMessage);
 };
-
-//TODO: merge authentication

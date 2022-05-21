@@ -3,8 +3,11 @@ import { Container } from 'typedi';
 
 import Random from '../../utils/random';
 
-import RoomMembersService from './RoomMembersService';
+import RoomService from '../rooms/RoomService';
 
+import * as Auth from '../../middlewares/auth.middleware';
+
+import RoomMembersService from './RoomMembersService';
 
 const create: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling insert user: %o', req.body);
@@ -18,7 +21,7 @@ const create: RequestHandler = async (req: Request, res: Response, next: NextFun
     return res.status(200). json({ id });
   } catch(e){
     console.error('🔥 error: %o', e);
-    next(e);
+    return next(e);
   }
 };
 
@@ -26,9 +29,16 @@ const deleteUser: RequestHandler = async (req: Request, res: Response, next: Nex
     console.debug('Calling delete room member: %o', req.body);
     try{
         const service = Container.get<RoomMembersService>(RoomMembersService);
-        const { id } = req.body;
+        const { userId, roomId } = req.body;
 
-        const deleted = await service.delete(id);
+        const roomService = Container.get<RoomService>(RoomService);
+        const room = await roomService.get(roomId);
+
+        if(room.owner !== req.user.id){
+            return res.status(401).json({ message: 'Not enough privileges' });
+        }
+
+        const deleted = await service.delete(userId, roomId);
 
         return res.status(200). json({ deleted });
     } catch(e){
@@ -38,6 +48,6 @@ const deleteUser: RequestHandler = async (req: Request, res: Response, next: Nex
 };
 
 export default (app: Router): void => {
-    app.post('/roomMembers/', create);
-    app.delete('/roomMembers/', deleteUser);
+    app.delete('/room-members/', Auth.authorize([]), deleteUser);
+    app.post('/room-members/', Auth.authorize([]), create);
 };

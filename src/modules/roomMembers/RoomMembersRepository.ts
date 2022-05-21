@@ -7,12 +7,13 @@ import { Repository } from '../../types';
 import RoomMember from './RoomMembersModel';
 
 @Service()
-export default class RoomMembersRepository implements Repository<RoomMember> {
+export default class RoomMembersRepository
+  implements Repository<RoomMember, { userId: string; roomId: string }>
+{
   constructor(
     @Inject('db')
     private db: DatabasePool
-  ) {
-  }
+  ) {}
 
   get(id: string): Promise<RoomMember> {
     throw new Error(`Method not implemented. ${id}`);
@@ -22,13 +23,14 @@ export default class RoomMembersRepository implements Repository<RoomMember> {
     throw new Error(`Method not implemented. ${o.id}`);
   }
 
-  async delete(id: string): Promise<boolean> {
+  async delete(key: { userId: string; roomId: string }): Promise<boolean> {
     const { rowCount } = await this.db.connect((connection) =>
       connection.query(sql`
-          DELETE
-          FROM room_members
-          WHERE id = ${id}
-      `)
+                DELETE
+                FROM room_members
+                WHERE user_id = ${key.userId}
+                  AND room_id = ${key.roomId};
+            `)
     );
 
     return rowCount === 1;
@@ -41,9 +43,9 @@ export default class RoomMembersRepository implements Repository<RoomMember> {
 
     const { rowCount } = await this.db.connect((connection) =>
       connection.query(sql`
-          INSERT INTO room_members(id, joined_at, room_id, user_id)
-          VALUES (${id}, ${roomMember.joinedAt.toISOString()}, ${roomId}, ${userId});
-      `)
+                INSERT INTO room_members(id, joined_at, room_id, user_id)
+                VALUES (${id}, ${roomMember.joinedAt.toISOString()}, ${roomId}, ${userId});
+            `)
     );
 
     if (rowCount === 1) {

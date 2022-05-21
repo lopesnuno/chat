@@ -17,6 +17,7 @@ export default class Room {
     return {
       id: this.id,
       name: this.name,
+      owner: this.owner,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     };

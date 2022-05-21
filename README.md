@@ -16,7 +16,7 @@ key** to a file.
 
 Rename `private.pem` and `private.pem` to `.key` and paste them into `/tools`.
 
-In `generate-token.ts`, just edit the `name`, `userId` and `role` and then **run the following command** 
+Then **run the following command** 
 in the terminal to **generate the token**.
 
 ```bash
