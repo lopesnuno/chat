@@ -29,22 +29,42 @@ export default class MessageRepository implements Repository<Message> {
 
     return new Message(messages.id, messages.message, messages.sender_id, messages.recipient_id, messages.reply_to, messages. room_id, new Date(messages.send_at as number));
   }
+  
+  async list(id: string): Promise<Message[]> {
+    const { rows  } = await this.db.connect((connection) =>
+      connection.query(sql`
+          SELECT *
+          FROM messages
+          WHERE rooms_id = ${id} LIMIT 50;
+      `)
+    );
 
-    async update(o: Message): Promise<boolean> {
-        const id = o.id;
-        const content = o.content;
+    const messages = [];
 
-        const { rowCount } = await this.db.connect((connection) =>
-            connection.query(sql`
-                UPDATE messages
-                SET message = ${content},
-                    send_at = ${o.sendAt.toISOString()}
-                WHERE id = ${id}
-            `)
-        );
+    for(let i = 0; i < rows.length; i++) {
+      const obj = rows[i];
 
-        return rowCount === 1;
+      messages.push(new Message(obj.id, obj.message, obj.sender_id, obj.recipient_id, obj.reply_to, obj.rooms_id, new Date(obj.send_at as number)));
     }
+
+    return messages;
+  }
+
+  async update(o: Message): Promise<boolean> {
+    const id = o.id;
+    const content = o.content;
+
+    const { rowCount } = await this.db.connect((connection) =>
+      connection.query(sql`
+          UPDATE messages
+          SET message = ${content},
+              send_at = ${o.sendAt.toISOString()}
+          WHERE id = ${id}
+        `)
+    );
+
+    return rowCount === 1;
+  }
 
   async create(message: Message): Promise<Message> {
     const id = message.id;
