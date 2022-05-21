@@ -8,7 +8,7 @@ import Random from '../../utils/random';
 import MessageService from './MessageService';
 
 const list: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
-    console.debug('Calling list message: %o', req.params.id);
+    console.debug('Calling list messages: %o', req.params.id);
     try {
         const service = Container.get<MessageService>(MessageService);
         const id = req.params.id;

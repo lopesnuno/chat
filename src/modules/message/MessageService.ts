@@ -17,7 +17,7 @@ export default class MessageService {
         return this.repository.get(id);
     }
 
-    public async list(id: string): Promise<Message> {
+    public async list(id: string): Promise<Message[]> {
         console.log(`Getting message from room ${id}`);
         return this.repository.list(id);
     }
