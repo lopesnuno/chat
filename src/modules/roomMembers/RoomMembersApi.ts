@@ -3,11 +3,26 @@ import { Container } from 'typedi';
 
 import Random from '../../utils/random';
 
-import RoomService from '../rooms/RoomService';
-
 import * as Auth from '../../middlewares/auth.middleware';
 
+import RoomService from '../rooms/RoomService';
+
 import RoomMembersService from './RoomMembersService';
+
+const list: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    console.debug('Calling list members: %o', req.params.id);
+    try {
+        const service = Container.get<RoomMembersService>(RoomMembersService);
+        const id = req.params.id;
+
+        const members = await service.list(id);
+
+        return res.status(200).json(members);
+    } catch (e) {
+        console.error('🔥 error: %o', e);
+        return next(e);
+    }
+};
 
 const create: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   console.debug('Calling insert user: %o', req.body);
@@ -18,7 +33,7 @@ const create: RequestHandler = async (req: Request, res: Response, next: NextFun
 
     await service.create(id, roomId, userId);
 
-    return res.status(200). json({ id });
+    return res.status(200).json({ id });
   } catch(e){
     console.error('🔥 error: %o', e);
     return next(e);
@@ -40,7 +55,7 @@ const deleteUser: RequestHandler = async (req: Request, res: Response, next: Nex
 
         const deleted = await service.delete(userId, roomId);
 
-        return res.status(200). json({ deleted });
+        return res.status(200).json({ deleted });
     } catch(e){
         console.error('🔥 error: %o', e);
         return next(e);
@@ -48,6 +63,7 @@ const deleteUser: RequestHandler = async (req: Request, res: Response, next: Nex
 };
 
 export default (app: Router): void => {
+    app.get('/room-members/:id', Auth.authorize([]), list);
     app.delete('/room-members/', Auth.authorize([]), deleteUser);
     app.post('/room-members/', Auth.authorize([]), create);
 };
