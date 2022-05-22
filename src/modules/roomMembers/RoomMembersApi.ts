@@ -13,7 +13,7 @@ const list: RequestHandler = async (req: Request, res: Response, next: NextFunct
     console.debug('Calling list members: %o', req.params.id);
     try {
         const service = Container.get<RoomMembersService>(RoomMembersService);
-        const id = req.params.id;
+        const id = req.params.id;   // id === roomId
 
         const members = await service.list(id);
 
@@ -63,7 +63,7 @@ const deleteUser: RequestHandler = async (req: Request, res: Response, next: Nex
 };
 
 export default (app: Router): void => {
-    app.get('/room-members/:id', Auth.authorize([]), list);
+    app.get('/room-members/room/:id', Auth.authorize([]), list);
     app.delete('/room-members/', Auth.authorize([]), deleteUser);
     app.post('/room-members/', Auth.authorize([]), create);
 };
