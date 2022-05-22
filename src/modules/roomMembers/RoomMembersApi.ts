@@ -10,12 +10,12 @@ import RoomService from '../rooms/RoomService';
 import RoomMembersService from './RoomMembersService';
 
 const list: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
-    console.debug('Calling list members: %o', req.params.id);
+    console.debug('Calling list members: %o', req.params.room);
     try {
         const service = Container.get<RoomMembersService>(RoomMembersService);
-        const id = req.params.id;   // id === roomId
+        const room = req.params.room;
 
-        const members = await service.list(id);
+        const members = await service.list(room);
 
         return res.status(200).json(members);
     } catch (e) {
@@ -63,7 +63,8 @@ const deleteUser: RequestHandler = async (req: Request, res: Response, next: Nex
 };
 
 export default (app: Router): void => {
-    app.get('/room-members/room/:id', Auth.authorize([]), list);
+    app.get('/room-members/:room', Auth.authorize([]), list); //  list of room members
+    //app.get('/room-member/:id', Auth.authorize([]), get); //  id === messageId => single member info
     app.delete('/room-members/', Auth.authorize([]), deleteUser);
     app.post('/room-members/', Auth.authorize([]), create);
 };
