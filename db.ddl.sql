@@ -32,7 +32,7 @@ CREATE TABLE room_members
 CREATE TABLE messages
 (
     id           char(20) NOT NULL,
-    send_at      TIMESTAMP NOT NULL,
+    sent_at      TIMESTAMP NOT NULL,
     message      varchar(500),
     sender_id    char(20) NOT NULL
         CONSTRAINT fk_messages_sender REFERENCES users (id),
@@ -40,7 +40,7 @@ CREATE TABLE messages
         CONSTRAINT fk_messages_recipient REFERENCES users (id),
     reply_to     char(20)
         CONSTRAINT fk_messages_reply REFERENCES messages (id),
-    rooms_id      char(20)
+    room_id      char(20)
         CONSTRAINT fk_messages_rooms REFERENCES rooms (id),
     CONSTRAINT pk_messages PRIMARY KEY (id)
 );

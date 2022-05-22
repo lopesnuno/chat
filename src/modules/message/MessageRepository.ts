@@ -27,7 +27,7 @@ export default class MessageRepository implements Repository<Message> {
     }
     const messages = rows[0];
 
-    return new Message(messages.id, messages.message, messages.sender_id, messages.recipient_id, messages.reply_to, messages. room_id, new Date(messages.send_at as number));
+    return new Message(messages.id, messages.message, messages.sender_id, messages.recipient_id, messages.reply_to, messages. room_id, new Date(messages.sent_at as number));
   }
   
   async list(id: string): Promise<Message[]> {
@@ -35,7 +35,7 @@ export default class MessageRepository implements Repository<Message> {
       connection.query(sql`
           SELECT *
           FROM messages
-          WHERE rooms_id = ${id} LIMIT 50;
+          WHERE room_id = ${id} LIMIT 50;
       `)
     );
 
@@ -44,7 +44,7 @@ export default class MessageRepository implements Repository<Message> {
     for(let i = 0; i < rows.length; i++) {
       const obj = rows[i];
 
-      messages.push(new Message(obj.id, obj.message, obj.sender_id, obj.recipient_id, obj.reply_to, obj.rooms_id, new Date(obj.send_at as number)));
+      messages.push(new Message(obj.id, obj.message, obj.sender_id, obj.recipient_id, obj.reply_to, obj.room_id, new Date(obj.sent_at as number)));
     }
 
     return messages;
@@ -58,7 +58,7 @@ export default class MessageRepository implements Repository<Message> {
       connection.query(sql`
           UPDATE messages
           SET message = ${content},
-              send_at = ${o.sendAt.toISOString()}
+              sent_at = ${o.sentAt.toISOString()}
           WHERE id = ${id}
         `)
     );
@@ -76,8 +76,8 @@ export default class MessageRepository implements Repository<Message> {
 
     const { rowCount } = await this.db.connect((connection) =>
       connection.query(sql`
-                INSERT INTO messages(id, send_at, message, sender_id, recipient_id, reply_to, rooms_id)
-                VALUES (${id}, ${message.sendAt.toISOString()}, ${content}, ${senderId}, ${recipientId}, ${replyTo},
+                INSERT INTO messages(id, sent_at, message, sender_id, recipient_id, reply_to, room_id)
+                VALUES (${id}, ${message.sentAt.toISOString()}, ${content}, ${senderId}, ${recipientId}, ${replyTo},
                         ${roomId});
             `)
     );

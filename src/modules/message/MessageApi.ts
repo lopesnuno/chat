@@ -8,11 +8,11 @@ import Random from '../../utils/random';
 import MessageService from './MessageService';
 
 const list: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
-    console.debug('Calling list messages: %o', req.params.id);
+    console.debug('Calling list messages: %o', req.params.room);
     try {
         const service = Container.get<MessageService>(MessageService);
-        const id = req.params.id;
-        const messages = await service.list(id);
+        const room = req.params.room;
+        const messages = await service.list(room);
 
         return res.status(200).json(messages);
     } catch (e) {
@@ -25,10 +25,10 @@ const create: RequestHandler = async (req: Request, res: Response, next: NextFun
     console.debug('Calling insert message: %o', req.body);
     try{
         const service = Container.get<MessageService>(MessageService);
-        const { content, senderId, recipientId, replyTo, roomId } = req.body;
+        const { content, recipientId, replyTo, roomId } = req.body;
         const id = Random.id();
 
-        await service.create(id, content, senderId, recipientId, replyTo, roomId);
+        await service.create(id, content, req.user.id, recipientId, replyTo, roomId);
 
         return res.status(200).json({ id });
     } catch(e){
@@ -83,7 +83,7 @@ const deleteMessage: RequestHandler = async (req: Request, res: Response, next: 
 };
 
 export default (app: Router): void => {
-    app.get('/message/:id', Auth.authorize([]), list);
+    app.get('/messages/:room', Auth.authorize([]), list);
     app.post('/message/', Auth.authorize([]), create);
     app.put('/message/', Auth.authorize([]),  update);
     app.delete('/message/', Auth.authorize([]), deleteMessage);
