@@ -45,6 +45,22 @@ describe('Rooms API', () => {
       expect(room).toBeDefined();
       expect(room.name).toEqual(updatedRoomName);
     });
+
+    test.todo('should delete room', async() => {
+      const roomName = `Deleted Test room ${Date.now()}`;
+      const { id } = await api.deleteRoom(roomName);
+
+      expect(id).toBeUndefined();
+
+      const deletedRoomName = `Deleted Test room ${Date.now()}`;
+      const { deleted } = await api.deleteRoom(id, deletedRoomName);
+
+      expect(deleted).toBeUndefined();
+
+      const room = await api.getRoom(id);
+
+      expect(room).toBeUndefined();
+    });
   });
 
 

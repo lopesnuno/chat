@@ -16,6 +16,10 @@ class Api extends HttpClient {
   public updateRoom = (id: string, name: string) => {
     return this.instance.put<{ id: string, name: string }, { updated: boolean }>('/room/', { id, name });
   }
+
+  public deleteRoom = (id: string) => {
+    return this.instance.delete<{ id: string, name: string }, { deleted: boolean }>('/room/', { id, name });
+  }
 }
 
 export default Api;
