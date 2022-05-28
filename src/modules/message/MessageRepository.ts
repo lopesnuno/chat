@@ -35,7 +35,8 @@ export default class MessageRepository implements Repository<Message> {
       connection.query(sql`
           SELECT *
           FROM messages
-          WHERE room_id = ${id} LIMIT 50;
+          WHERE room_id = ${id} 
+          ORDER BY sent_at DESC LIMIT 50;
       `)
     );
 
