@@ -12,7 +12,6 @@ describe('Rooms API', () => {
       const room = await api.getRoom('37KQmczHRQdgKKQqhDXF');
 
       expect(room).toBeDefined();
-      expect(room.name).toBeDefined();
       expect(room.id).toEqual('37KQmczHRQdgKKQqhDXF');
       expect(room.name).toEqual('Biclas e borgas');
       expect(room.createdAt).toBeDefined();
@@ -46,7 +45,7 @@ describe('Rooms API', () => {
       expect(room.name).toEqual(updatedRoomName);
     });
 
-    test.todo('should delete room', async() => {
+    /*test.todo('should delete room', async() => {
       const roomName = `Deleted Test room ${Date.now()}`;
       const { id } = await api.deleteRoom(roomName);
 
@@ -60,7 +59,7 @@ describe('Rooms API', () => {
       const room = await api.getRoom(id);
 
       expect(room).toBeUndefined();
-    });
+    });*/
   });
 
 
