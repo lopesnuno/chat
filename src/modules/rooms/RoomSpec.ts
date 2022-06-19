@@ -5,6 +5,7 @@ describe('Rooms API', () => {
 
   beforeEach(() => {
     api = new Api();
+    api.authenticate();
   });
 
   describe('Endpoints', () => {
@@ -19,11 +20,11 @@ describe('Rooms API', () => {
     });
 
     test('should create a room', async () => {
-      const { id } = await api.createRoom('test room');
+      const { newRoom } = await api.createRoom('test room');
 
-      expect(id).toBeDefined();
+      expect(newRoom).toBeDefined();
 
-      const room = await api.getRoom(id);
+      const room = await api.getRoom(newRoom);
 
       expect(room).toBeDefined();
     });
@@ -45,7 +46,7 @@ describe('Rooms API', () => {
       expect(room.name).toEqual(updatedRoomName);
     });
 
-    /*test.todo('should delete room', async() => {
+    /*test('should delete room', async() => {
       const roomName = `Deleted Test room ${Date.now()}`;
       const { id } = await api.deleteRoom(roomName);
 

@@ -4,7 +4,7 @@ class Api extends HttpClient {
   constructor() {
     super();
   }
-
+  //ROOM
   public getRoom = (id: string) => {
     return this.instance.get<{ name: string, id: string }>(`/room/${id}`);
   };
@@ -18,8 +18,14 @@ class Api extends HttpClient {
   }
 
   /*public deleteRoom = (id: string) => {
-    return this.instance.delete<{ id: string, name: string }, { deleted: boolean }>('/room/', { id, name });
-  }*/
+    return this.instance.delete<{ id: string }, { deleted: boolean }>('/room/', { id });
+  }*/   //TODO: deleteRoom
+
+  //USER
+  public createUser = (name: string) => {
+    return this.instance.post<{ name: string}, { id: string}>('/user/', { name });
+  }
+
 }
 
 export default Api;

@@ -50,7 +50,7 @@ export default {
    */
   jwtSecret: config.JWT_SECRET ?? 'qweertyuiop',
   jwtAlgorithm: (config.JWT_ALGO ?? 'HS256') as Algorithm,
-
+  testToken: config.TOKEN,
   /**
    * Used by winston logger
    */

@@ -79,8 +79,8 @@ const deleteRoom: RequestHandler = async (req: Request, res: Response, next: Nex
 };
 
 export default (app: Router): void => {
-  app.post('/room/', createRoom);
-  app.get('/room/:id', getRoom);
-  app.put('/room/', updateRoom);
+  app.post('/room/', Auth.authorize([]), createRoom);
+  app.get('/room/:id', Auth.authorize([]), getRoom);
+  app.put('/room/', Auth.authorize([]), updateRoom);
   app.delete('/room/', Auth.authorize([]), deleteRoom);
 };
