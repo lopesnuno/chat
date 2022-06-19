@@ -23,7 +23,6 @@ abstract class HttpClient {
   };
 
   public authenticate = (): void => {
-
     this.token = process.env.testToken; // TODO: generate a valid token for authenticated methods
   };
 
