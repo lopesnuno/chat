@@ -5,6 +5,7 @@ describe('Rooms API', () => {
 
   beforeEach(() => {
     api = new Api();
+    api.authenticate();
   });
 
   describe('Endpoints', () => {
