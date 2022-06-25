@@ -63,8 +63,10 @@ const deleteUser: RequestHandler = async (req: Request, res: Response, next: Nex
 };
 
 export default (app: Router): void => {
-    app.get('/room-members/:room', Auth.authorize([]), list); //  list of room members
-    //app.get('/room-member/:id', Auth.authorize([]), get); //  id === messageId => single member info
+    //  list of room members
+    app.get('/room-members/:room', Auth.authorize([]), list);
+    //  id == messageId => single member info
+    //app.get('/room-member/:id', Auth.authorize([]), get);
     app.delete('/room-members/', Auth.authorize([]), deleteUser);
     app.post('/room-members/', Auth.authorize([]), create);
 };
