@@ -1,11 +1,13 @@
 import Api from '../../utils/ApiClient';
 
+import config from '../../config';
+
 describe('Rooms API', () => {
   let api = null;
 
   beforeEach(() => {
     api = new Api();
-    api.authenticate();
+    api.authenticate(config.testToken);
   });
 
   describe('Endpoints', () => {
@@ -20,11 +22,11 @@ describe('Rooms API', () => {
     });
 
     test('should create a room', async () => {
-      const { newRoom } = await api.createRoom('test room');
+      const { id } = await api.createRoom('test room');
 
-      expect(newRoom).toBeDefined();
+      expect(id).toBeDefined();
 
-      const room = await api.getRoom(newRoom);
+      const room = await api.getRoom(id);
 
       expect(room).toBeDefined();
     });

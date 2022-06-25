@@ -14,7 +14,6 @@ import UserService from '../modules/users/UserService';
 
 // eslint-disable-next-line import/prefer-default-export
 export const authorize = (allowedRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
-    return next();
     try {
         let jwt = req.headers.authorization;
 

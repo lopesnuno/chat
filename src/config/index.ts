@@ -19,15 +19,16 @@ function loadConfigFile(env) {
   }
   return path.resolve(__dirname, `../../${filename}`);
 }
+const configFileName = loadConfigFile(process.env.NODE_ENV || 'dev');
 
 const configFile = dotenvConfig({
-  path: loadConfigFile(process.env.NODE_ENV || 'dev')
+  path: configFileName
 });
 
 if (configFile.error) {
   // This error should crash whole process
 
-  throw new Error('⚠️  Couldn\'t find .env file  ⚠️');
+  throw new Error(`⚠️  Couldn't find ${configFileName} file  ⚠️`);
 }
 
 const config = configFile.parsed;
@@ -50,7 +51,7 @@ export default {
    */
   jwtSecret: config.JWT_SECRET ?? 'qweertyuiop',
   jwtAlgorithm: (config.JWT_ALGO ?? 'HS256') as Algorithm,
-  testToken: config.TOKEN,
+  testToken: config.TEST_TOKEN,
   /**
    * Used by winston logger
    */
