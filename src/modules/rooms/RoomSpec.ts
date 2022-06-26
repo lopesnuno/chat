@@ -1,10 +1,12 @@
 import Api from '../../utils/ApiClient';
+import config from '../../config';
 
 describe('Rooms API', () => {
   let api = null;
 
   beforeEach(() => {
     api = new Api();
+    api.authenticate(config.testToken);
   });
 
   describe('Endpoints', () => {
