@@ -62,15 +62,16 @@ describe('Rooms API', () => {
 
 
   describe('Authentication/Authorization', () => {
-    test('should block user from getting non-owned room', async () => {
+    beforeEach(() => {
       api.logout();
+    });
+
+    test('should block non-authenticated user from getting a room', async () => {
 
       await expect(api.getRoom('37KQmczHRQdgKKQqhDXF')).rejects.toThrow(/401/);
     });
 
     test('should block non-authenticated user from creating room', async() => {
-      api.logout();
-
       const room = `Test room ${Date.now()}`;
 
       await expect(api.createRoom(room)).rejects.toThrow(/401/);
