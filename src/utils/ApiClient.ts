@@ -18,12 +18,26 @@ class Api extends HttpClient {
   }
 
   //MESSAGE
+  // id = messageId
   public getMessage = (id: string) => {
+    return this.instance.get<{ id: string }>(`/message/${id}`);
+  }
+
+  // id = roomId
+  public listMessage = (id: string) => {
     return this.instance.get<{ id: string }>(`/messages/${id}`);
   }
 
   public createMessage = (content: string, recipientId: string, replyTo: string, roomId: string) => {
     return this.instance.post<{ content: string, recipientId: string, replyTo: string, roomId: string }, { id: string }>( '/message/', { content, recipientId, replyTo, roomId });
+  }
+
+  public updateMessage = (id: string, content: string) => {
+    return this.instance.put<{ id: string, content: string }, { updated: boolean }>('/message/', { id, content });
+  }
+
+  public deleteMessage = (id: string) => {
+    return this.instance.delete<{ id: string }, { deleted: boolean }>('/message/', { data: { id: id } });
   }
 }
 

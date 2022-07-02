@@ -7,6 +7,20 @@ import Random from '../../utils/random';
 
 import MessageService from './MessageService';
 
+const get: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    console.debug('Calling list messages: %o', req.params.room);
+    try {
+        const service = Container.get<MessageService>(MessageService);
+        const id = req.params.id;
+        const message = await service.get(id);
+
+        return res.status(200).json(message.json());
+    } catch (e) {
+        console.error('🔥 error: %o', e);
+        return next(e);
+    }
+};
+
 const list: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     console.debug('Calling list messages: %o', req.params.room);
     try {
@@ -83,6 +97,7 @@ const deleteMessage: RequestHandler = async (req: Request, res: Response, next: 
 };
 
 export default (app: Router): void => {
+    app.get('/message/:id', Auth.authorize([]), get);
     app.get('/messages/:room', Auth.authorize([]), list);
     app.post('/message/', Auth.authorize([]), create);
     app.put('/message/', Auth.authorize([]),  update);
