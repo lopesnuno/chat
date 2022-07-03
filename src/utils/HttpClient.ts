@@ -30,7 +30,6 @@ abstract class HttpClient {
     });
   };
 
-
   public authenticate = (token: string): void => {
     this.token = token;
   };

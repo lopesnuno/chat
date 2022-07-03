@@ -17,6 +17,10 @@ class Api extends HttpClient {
     return this.instance.put<{ id: string, name: string }, { updated: boolean }>('/room/', { id, name });
   }
 
+  public deleteRoom = (id: string) => {
+    return this.instance.delete<{ id: string }, { deleted: boolean }>('/room/', { data: { id: id } });
+  }
+
   //MESSAGE
   // id = messageId
   public getMessage = (id: string) => {
@@ -39,6 +43,7 @@ class Api extends HttpClient {
   public deleteMessage = (id: string) => {
     return this.instance.delete<{ id: string }, { deleted: boolean }>('/message/', { data: { id: id } });
   }
+
 }
 
 export default Api;
