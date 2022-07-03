@@ -4,6 +4,8 @@ INSERT INTO users(id, name, created_at, updated_at)
 VALUES ('6jrHnwiHihRNeWqrKirW', 'Rafa', '2014-12-06T16:40:34', '2022-12-03T17:15:00');
 INSERT INTO users(id, name, created_at, updated_at)
 VALUES ('hpAHdRc8jDLTMw7ikrRH', 'Lúcia', '2022-12-03T16:40:34', '2022-12-03T16:40:34');
+INSERT INTO users(id, name, created_at, updated_at)
+VALUES ('S3RsFtPzJaRfaT8mcDYy', 'Jonas', '2022-12-03T16:45:34', '2022-12-03T16:45:34');
 
 INSERT INTO rooms(id, name, created_at, updated_at, owner)
 VALUES ('37KQmczHRQdgKKQqhDXF', 'Biclas e borgas', '2015-12-02T16:40:34', '2019-12-02T16:40:34', 'wH4ofWP4EyprKpqQWStn');

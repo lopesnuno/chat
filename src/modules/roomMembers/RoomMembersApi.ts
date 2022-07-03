@@ -16,6 +16,13 @@ const create: RequestHandler = async (req: Request, res: Response, next: NextFun
     const { roomId, userId } = req.body;
     const id = Random.id();
 
+    const roomService = Container.get<RoomService>(RoomService);
+    const room = await roomService.get(roomId);
+
+    if(room.owner !== req.user.id){
+      return res.status(401).json({ message: 'Not enough privileges' });
+    }
+
     await service.create(id, roomId, userId);
 
     return res.status(200). json({ id });
