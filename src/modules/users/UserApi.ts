@@ -14,8 +14,6 @@ const getUser: RequestHandler = async (req: Request, res: Response, next: NextFu
     const id = req.params.id;
     const user = await service.get(id);
 
-    console.log(req.query.room);
-
     return res.status(200).json(user.json());
   } catch (e) {
     console.error('🔥 error: %o', e);
@@ -80,7 +78,7 @@ const deleteUser: RequestHandler = async (req: Request, res: Response, next: Nex
 };
 
 export default (app: Router): void => {
-  app.post('/user', Auth.authorize([]), createUser);
+  app.post('/user/', Auth.authorize([]), createUser);
   app.get('/user/:id', Auth.authorize([]), getUser);
   app.put('/user/', Auth.authorize([]), updateUser);
   app.delete('/user/', Auth.authorize([]), deleteUser);

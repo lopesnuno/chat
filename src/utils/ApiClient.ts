@@ -49,8 +49,26 @@ class Api extends HttpClient {
     return this.instance.post<{ roomId: string, userId: string }, { id: string }>('/room-members/', { roomId, userId });
   }
 
-  public deleteUser = (roomId: string, userId: string) => {
+  public removeUser = (roomId: string, userId: string) => {
     return this.instance.delete<{ roomId: string, userId: string }, { deleted: boolean }>('/room-members/', { data: { roomId: roomId, userId: userId } });
+  }
+
+  //USER
+
+  public getUser = (id: string) => {
+    return this.instance.get<{ id: string }>(`/user/${id}`);
+  }
+
+  public createUser = (name: string) => {
+    return this.instance.post<{ name: string}, {id: string}>('/user/', { name });
+  }
+
+  public updateUser = (id: string, name: string) => {
+    return this.instance.put<{id: string, name: string}, { updated: boolean}>( '/user/', { id, name });
+  }
+
+  public deleteUser = (id: string) => {
+    return this.instance.delete<{ id: string}, { deleted: boolean }>('/user/', { data: { id: id } });
   }
 }
 
