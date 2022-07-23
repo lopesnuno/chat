@@ -11,7 +11,7 @@ describe('User API', () => {
     //TODO: check why no checkpoints pass the tests
     describe('Endpoints', () => {
        test('Should get a user', async() => {
-           const user = api.getUser('6jrHnwiHihRNeWqrKirW');
+           const user = await api.getUser('6jrHnwiHihRNeWqrKirW');
 
            expect(user).toBeDefined();
            expect(user.id).toEqual('6jrHnwiHihRNeWqrKirW');
@@ -21,52 +21,48 @@ describe('User API', () => {
        });
        
        test('Should create a user', async() => {
-          const { id } = api.createUser('test user');
+          const { id } = await api.createUser('test user');
 
           expect(id).toBeDefined();
 
-          const user = api.getUser(id);
+          const user = await api.getUser(id);
 
           expect(user).toBeDefined();
        });
 
        test('Should update a user', async() => {
-          const { id } = api.createUser(`test user ${Date.now()}`);
-
-          expect(id).toBeDefined();
+          const id = '6jrHnwiHihRNeWqrKirW';
 
           const updatedUserName = `Updated User ${Date.now()}`;
-          const { updated } = api.updateUser(id, updatedUserName);
+          const { updated } = await api.updateUser(id, updatedUserName);
 
           expect(updated).toEqual(true);
 
-          const user = api.getUser(updated);
+          const user = await api.getUser(id);
 
           expect(user).toBeDefined();
           expect(user.name).toEqual(updatedUserName);
-       });
 
-       test('Should delete a user', async() => {
-          const { id } = api.createUser('Delete test user');
+          //Revert username back to original so that next time the getUser test still works
+          await api.updateUser(id, 'Rafa');
 
-          expect(id).toBeDefined();
+          const revertUser = await api.getUser(id);
 
-          const { deleted } = api.deleteUser(id);
-
-          expect(deleted).toEqual(true);
+          expect(revertUser).toBeDefined();
+          expect(revertUser.name).toEqual('Rafa');
        });
     });
 
     describe('Authorization', () => {
         test('Should block user from updating a user', async() => {
-            const user = 'S3RsFtPzJaRfaT8mcDYy';
+            const user = 'wH4ofWP4EyprKpqQWStn';
             const userName = 'Non-auth updated user';
 
-            await expect(api.updateUser(user, userName)).rejects.toThrow(/401/);
+            await expect(await api.updateUser(user, userName)).rejects.toThrow(/401/);
         });
         //TODO: check why test checks but still deletes the user
         test('Should block user from deleting a user', async() => {
-           const user = 'S3RsFtPzJaRfaT8mcDYy';
+           const user = 'wH4ofWP4EyprKpqQWStn';
 
            await expect(api.deleteUser(user)).rejects.toThrow(/401/);
         });
