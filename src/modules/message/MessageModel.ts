@@ -5,16 +5,16 @@ export default class Message {
   private _recipientId: string;
   private _replyTo: string;
   private _roomId: string;
-  private _sendAt: Date;
+  private _sentAt: Date;
 
-  constructor(id, content, senderId, recipientId, replyTo, roomId, sendAt: Date = new Date()) {
+  constructor(id, content, senderId, recipientId, replyTo, roomId, sentAt: Date = new Date()) {
     this._id = id;
     this._content = content;
     this._senderId = senderId;
     this._recipientId = recipientId;
     this._replyTo = replyTo;
     this._roomId = roomId;
-    this._sendAt = sendAt;
+    this._sentAt = sentAt;
   }
 
   json() {
@@ -25,7 +25,7 @@ export default class Message {
       recipientId: this.recipientId,
       replyTo: this.replyTo,
       roomId: this.roomId,
-      sendAt: this.sendAt
+      sentAt: this.sentAt
     };
   }
 
@@ -77,11 +77,11 @@ export default class Message {
     this._roomId = value;
   }
 
-  get sendAt(): Date {
-    return this._sendAt;
+  get sentAt(): Date {
+    return this._sentAt;
   }
 
-  set sendAt(value: Date) {
-    this._sendAt = value;
+  set sentAt(value: Date) {
+    this._sentAt = value;
   }
 }

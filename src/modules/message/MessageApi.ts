@@ -7,16 +7,30 @@ import Random from '../../utils/random';
 
 import MessageService from './MessageService';
 
+const list: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    console.debug('Calling list messages: %o', req.params.room);
+    try {
+        const service = Container.get<MessageService>(MessageService);
+        const room = req.params.room;
+        const messages = await service.list(room);
+
+        return res.status(200).json(messages);
+    } catch (e) {
+        console.error('🔥 error: %o', e);
+        return next(e);
+    }
+};
+
 const create: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     console.debug('Calling insert message: %o', req.body);
     try{
         const service = Container.get<MessageService>(MessageService);
-        const { content, senderId, recipientId, replyTo, roomId } = req.body;
+        const { content, recipientId, replyTo, roomId } = req.body;
         const id = Random.id();
 
-        await service.create(id, content, senderId, recipientId, replyTo, roomId);
+        await service.create(id, content, req.user.id, recipientId, replyTo, roomId);
 
-        return res.status(200). json({ id });
+        return res.status(200).json({ id });
     } catch(e){
         console.error('🔥 error: %o', e);
         return next(e);
@@ -61,7 +75,7 @@ const deleteMessage: RequestHandler = async (req: Request, res: Response, next: 
 
         const deleted = await service.delete(id);
 
-        return res.status(200). json({ deleted });
+        return res.status(200).json({ deleted });
     } catch(e){
         console.error('🔥 error: %o', e);
         return next(e);
@@ -69,7 +83,8 @@ const deleteMessage: RequestHandler = async (req: Request, res: Response, next: 
 };
 
 export default (app: Router): void => {
-  app.post('/message/', Auth.authorize([]), create);
+    app.get('/messages/:room', Auth.authorize([]), list);
+    app.post('/message/', Auth.authorize([]), create);
     app.put('/message/', Auth.authorize([]),  update);
     app.delete('/message/', Auth.authorize([]), deleteMessage);
 };
