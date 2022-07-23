@@ -12,6 +12,11 @@ export default class RoomMembersService {
   ) {
   }
 
+  public async list(id: string): Promise<RoomMember[]> {
+    console.log(`Getting members from room ${id}`);
+    return this.repository.list(id);
+  }
+
   public async delete(userId: string, roomId: string): Promise<boolean> {
     console.log(`Deleting member from room: ${roomId}`);
     const key = { userId, roomId };

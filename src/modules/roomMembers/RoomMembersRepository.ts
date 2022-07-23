@@ -19,6 +19,26 @@ export default class RoomMembersRepository
     throw new Error(`Method not implemented. ${id}`);
   }
 
+  async list(id: string): Promise<RoomMember[]> {
+    const { rows  } = await this.db.connect((connection) =>
+        connection.query(sql`
+          SELECT *
+          FROM room_members
+          WHERE room_id = ${id} LIMIT 50;
+      `)
+    );
+
+    const members = [];
+
+    for(let i = 0; i < rows.length; i++) {
+      const obj = rows[i];
+
+      members.push(new RoomMember(obj.id, obj.room_id, obj.user_id, new Date(obj.joined_at as number)));
+    }
+
+    return members;
+  }
+
   update(o: RoomMember): Promise<boolean> {
     throw new Error(`Method not implemented. ${o.id}`);
   }

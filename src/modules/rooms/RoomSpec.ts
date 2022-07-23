@@ -1,5 +1,4 @@
 import Api from '../../utils/ApiClient';
-
 import config from '../../config';
 
 describe('Rooms API', () => {
