@@ -14,7 +14,6 @@ describe('Rooms API', () => {
       const room = await api.getRoom('37KQmczHRQdgKKQqhDXF');
 
       expect(room).toBeDefined();
-      expect(room.name).toBeDefined();
       expect(room.id).toEqual('37KQmczHRQdgKKQqhDXF');
       expect(room.name).toEqual('Biclas e borgas');
       expect(room.createdAt).toBeDefined();
@@ -47,15 +46,47 @@ describe('Rooms API', () => {
       expect(room).toBeDefined();
       expect(room.name).toEqual(updatedRoomName);
     });
+
+    test('should delete room', async() => {
+      const roomName = `Delete test room ${Date.now()}`;
+      const { id } = await api.createRoom(roomName);
+
+      expect(id).toBeDefined();
+
+      const { deleted } = await api.deleteRoom(id);
+
+      expect(deleted).toEqual(true);
+    });
   });
 
 
   describe('Authentication/Authorization', () => {
-    test('should block user from creating room', async () => {
+    beforeEach(() => {
       api.logout();
+    });
 
-      // TODO: once we have auth in this branch, test if auth is working properly for all endpoints
+    test('should block non-authenticated user from getting a room', async () => {
+
       await expect(api.getRoom('37KQmczHRQdgKKQqhDXF')).rejects.toThrow(/401/);
+    });
+
+    test('should block non-authenticated user from creating room', async() => {
+      const room = `Test room ${Date.now()}`;
+
+      await expect(api.createRoom(room)).rejects.toThrow(/401/);
+    });
+
+    test('should block user from updating non-owned room', async() => {
+      const room = '37KQmczHRQdgKKQqhDXF';
+      const roomName = `Update try ${Date.now()}`;
+
+      await expect(api.updateRoom(room, roomName)).rejects.toThrow(/401/);
+    });
+
+    test('should block user from deleting non-owned room', async() => {
+      const room = '37KQmczHRQdgKKQqhDXF';
+
+      await expect(api.deleteRoom(room)).rejects.toThrow(/401/);
     });
   });
 
