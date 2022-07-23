@@ -40,14 +40,13 @@ abstract class RandomGenerator {
     }
     return result;
   }
-
   /**
    * @name Random.id
    * @summary Return a unique identifier, such as `"Jjwjg6gouWLXhMGKW"`, that is
    * likely to be unique in the whole world.
    * @param charsCount
    */
-  id(charsCount = 17) {
+  id(charsCount = 20) {
     return this.randomString(charsCount, UNMISTAKABLE_CHARS);
   }
 

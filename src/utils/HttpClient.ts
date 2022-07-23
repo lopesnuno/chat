@@ -22,9 +22,8 @@ abstract class HttpClient {
     );
   };
 
-
-  public authenticate = (): void => {
-    this.token = ''; // TODO: generate a valid token for authenticated methods
+  public authenticate = (token: string): void => {
+    this.token = token; // TODO: generate a valid token for authenticated methods
   };
 
   public logout() {
