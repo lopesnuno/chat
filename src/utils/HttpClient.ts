@@ -20,10 +20,18 @@ abstract class HttpClient {
       this.handleResponse,
       this.handleError
     );
+    this.instance.interceptors.request.use((configFromParams) => {
+      if (!this.token) {return configFromParams;}
+      const axiosConfig = configFromParams;
+
+      axiosConfig.headers.Authorization = `Bearer ${this.token}`;
+      return axiosConfig;
+    });
   };
 
+
   public authenticate = (token: string): void => {
-    this.token = token; // TODO: generate a valid token for authenticated methods
+    this.token = token;
   };
 
   public logout() {
