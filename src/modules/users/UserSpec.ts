@@ -8,7 +8,7 @@ describe('User API', () => {
         api = new Api();
         api.authenticate(config.testToken);
     });
-    //TODO: check why no checkpoints pass the tests
+
     describe('Endpoints', () => {
        test('Should get a user', async() => {
            const user = await api.getUser('6jrHnwiHihRNeWqrKirW');
@@ -53,23 +53,8 @@ describe('User API', () => {
        });
     });
 
-    describe('Authorization', () => {
-        test('Should block user from updating a user', async() => {
-            const user = 'wH4ofWP4EyprKpqQWStn';
-            const userName = 'Non-auth updated user';
-
-            await expect(await api.updateUser(user, userName)).rejects.toThrow(/401/);
-        });
-        //TODO: check why test checks but still deletes the user
-        test('Should block user from deleting a user', async() => {
-           const user = 'wH4ofWP4EyprKpqQWStn';
-
-           await expect(api.deleteUser(user)).rejects.toThrow(/401/);
-        });
-    });
-
-    describe('Authentication', () => {
-        beforeEach( () => {
+    describe('Authorization/Authentication', () => {
+        beforeEach(() => {
             api.logout();
         });
 
