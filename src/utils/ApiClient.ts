@@ -22,12 +22,18 @@ class Api extends HttpClient {
   }
 
   //MESSAGE
-  // id = messageId
+  /**
+   * Request a message from the API
+   * @param id = messageId
+   */
   public getMessage = (id: string) => {
     return this.instance.get<{ id: string }>(`/message/${id}`);
   }
 
-  // id = roomId
+  /**
+   * Request a list of messages from the API
+   * @param id = roomId
+   */
   public listMessage = (id: string) => {
     return this.instance.get<{ id: string }>(`/messages/${id}`);
   }
