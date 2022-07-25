@@ -17,7 +17,6 @@ class Api extends HttpClient {
     return this.instance.put<{ id: string, name: string }, { updated: boolean }>('/room/', { id, name });
   }
 
-  //TODO: deleteRoom
   public deleteRoom = (id: string) => {
     return this.instance.delete<{ id: string }, { deleted: boolean }>('/room/', { data: { id: id } });
   }
